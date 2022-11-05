@@ -45,6 +45,13 @@ def meannvalue(values):
     return sumvalues(values) / len(values)
 
 
-def countvalue(values, xw):
+def countvalue(values, x):
     """Your documentation goes here"""
-    # Your code goes here
+    
+    n = 0
+    for el in values:
+        # not sure if 3.0 shoud be counted as the same as 3. I am not counting it a the moment.
+        # TODO: Follow up 
+        if type(el) == type(x) and el == x:
+            n += 1
+    return n
