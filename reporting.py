@@ -1,9 +1,3 @@
-# This is a template. 
-# You should modify the functions below to match
-# the signatures determined by the project specification
-
-
-
 def daily_average(data, monitoring_station, pollutant):
     """Your documentation goes here"""
     
