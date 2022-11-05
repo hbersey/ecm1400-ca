@@ -35,14 +35,20 @@ class MonitoringSite:
                             for row in reader])
             return data
 
+    @staticmethod
+    def with_sitecode(site_code: str):
+        filtered = list(
+            filter(lambda site: site.site_code == site_code, SITES))
+        if len(filtered) == 0:
+            raise ValueError(f"Site with site code {site_code} not found")
+        return filtered[0]
+
 
 MARYBONE_ROAD = MonitoringSite(
-    "Pollution-London Harlington.csv",
+    "Pollution-London Marylebone Road.csv",
     "Urban Traffic",
     -0.154611, 51.52253,
     "MY1"
-
-
 )
 
 N_KENSINGTON = MonitoringSite(
@@ -58,3 +64,5 @@ HARLINGTON = MonitoringSite(
     -0.441614, 51.48879,
     "HRL"
 )
+
+SITES = [MARYBONE_ROAD, N_KENSINGTON, HARLINGTON]
