@@ -19,6 +19,12 @@ def maxvalue(values):
 
     all_numerical_or_raise(values)
 
+    val = values[0]
+    for el in values:
+        if el > val:
+            val = el
+    return val
+
 
 def minvalue(values):
     """Your documentation goes here"""
