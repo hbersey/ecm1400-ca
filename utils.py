@@ -42,6 +42,7 @@ def meannvalue(values):
     """Your documentation goes here"""
 
     all_numerical_or_raise(values)
+    return sumvalues(values) / len(values)
 
 
 def countvalue(values, xw):
