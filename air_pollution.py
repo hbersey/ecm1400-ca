@@ -54,7 +54,3 @@ def load_ap_data():
     # convert to np array at the end because we don't know the number of rows
     # (np arrays not opptimised for dynamic-array-like behaviour)
     return np.array(all_data)
-
-
-if __name__ == "__main__":
-    load_ap_data()
