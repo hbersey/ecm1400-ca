@@ -1,4 +1,5 @@
 import numpy as np
+import numpy.typing as npt
 import typing
 import csv
 
@@ -10,7 +11,9 @@ __FILES = [
 ]
 
 NO_DATA = -1.0
-__NO_DATA_TEXT = "No data" # Avoids magic string issues
+__NO_DATA_TEXT = "No data"  # Avoids magic string issues
+
+# APData = npt.ArrayLike[]
 
 
 def __ap_dt(date: typing.AnyStr, time: typing.AnyStr):
@@ -54,3 +57,15 @@ def load_ap_data():
     # convert to np array at the end because we don't know the number of rows
     # (np arrays not opptimised for dynamic-array-like behaviour)
     return np.array(all_data)
+
+
+def monitoring_station_index(s: typing.AnyStr):
+    # Todo: Replace this fn with something better
+    s = s.upper()
+
+    if s == "HARLINGTON" or s == "HRL":
+        return 0
+    elif s == "N KENSINGTON" or s == "NK1":
+        return 1
+    elif s == "MARYLEBONE ROAD" or s == "MY1":
+        return 2
