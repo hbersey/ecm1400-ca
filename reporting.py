@@ -1,4 +1,4 @@
-from air_pollution import monitoring_station_index, NO_DATA
+from air_pollution import monitoring_station_index, NO_DATA, select_pollutant
 import numpy as np
 
 
@@ -6,14 +6,7 @@ def daily_average(data, monitoring_station, pollutant):
     """Your documentation goes here"""
 
     ms_data = data[monitoring_station_index(monitoring_station)]
-
-    # Todo: extract
-    if pollutant != "pm25":
-        ms_data = np.delete(ms_data, 3, 1)
-    if pollutant != "pm10":
-        ms_data = np.delete(ms_data, 2, 1)
-    if pollutant != "no":
-        ms_data = np.delete(ms_data, 1, 1)
+    ms_data = select_pollutant(ms_data, pollutant)
 
     sigma_n = np.zeros((365, 2))
     dt0 = ms_data[0][0]

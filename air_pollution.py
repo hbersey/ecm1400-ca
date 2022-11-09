@@ -69,3 +69,21 @@ def monitoring_station_index(s: typing.AnyStr):
         return 1
     elif s == "MARYLEBONE ROAD" or s == "MY1":
         return 2
+
+
+__POLUTANT_INDECIES = {
+    p: i + 1 for (i, p) in enumerate(["no", "pm10", "pm25"])
+}
+
+
+def select_pollutant(data: npt.ArrayLike, pollutant: typing.AnyStr) -> npt.ArrayLike:
+    if not pollutant in __POLUTANT_INDECIES:
+        raise KeyError()
+
+    i = __POLUTANT_INDECIES[pollutant]
+    for j in range(3, 0, -1):
+        if j == i:
+            continue
+        data = np.delete(data, j, 1)
+
+    return data
