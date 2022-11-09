@@ -28,8 +28,6 @@ def daily_average(data, monitoring_station, pollutant):
 
         res[i] = sigma / n
 
-    print(res)
-
     return res
 
 
