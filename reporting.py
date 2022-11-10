@@ -1,19 +1,19 @@
-from air_pollution import monitoring_station_index, NO_DATA, select_pollutant
+import air_pollution as ap
 import numpy as np
 
 
 def daily_average(data, monitoring_station, pollutant):
     """Your documentation goes here"""
 
-    ms_data = data[monitoring_station_index(monitoring_station)]
-    ms_data = select_pollutant(ms_data, pollutant)
+    ms_data = data[ap.monitoring_station_index(monitoring_station)]
+    ms_data = ap.select_pollutant(ms_data, pollutant)
 
     sigma_n = np.zeros((365, 2))
     dt0 = ms_data[0][0]
     for (dt, val) in ms_data:
         dt: np.datetime64
 
-        if val == NO_DATA:
+        if val == ap.NO_DATA:
             continue
 
         i = (dt - dt0) // np.timedelta64(1, 'D')
@@ -34,8 +34,8 @@ def daily_average(data, monitoring_station, pollutant):
 def daily_median(data, monitoring_station, pollutant):
     """Your documentation goes here"""
 
-    ms_data = data[monitoring_station_index(monitoring_station)]
-    ms_data = select_pollutant(ms_data, pollutant)
+    ms_data = data[ap.monitoring_station_index(monitoring_station)]
+    ms_data = ap.select_pollutant(ms_data, pollutant)
 
     days = [[] for _ in range(365)]
     dt0 = ms_data[0][0]
@@ -43,7 +43,7 @@ def daily_median(data, monitoring_station, pollutant):
     for (dt, val) in ms_data:
         dt: np.datetime64
 
-        if val == NO_DATA:
+        if val == ap.NO_DATA:
             continue
 
         i = (dt - dt0) // np.timedelta64(1, 'D')
@@ -68,14 +68,14 @@ def daily_median(data, monitoring_station, pollutant):
 def hourly_average(data, monitoring_station, pollutant):
     """Your documentation goes here"""
 
-    ms_data = data[monitoring_station_index(monitoring_station)]
-    ms_data = select_pollutant(ms_data, pollutant)
+    ms_data = data[ap.monitoring_station_index(monitoring_station)]
+    ms_data = ap.select_pollutant(ms_data, pollutant)
 
     sigma_n = np.zeros((24, 2))
     for (dt, val) in ms_data:
         dt: np.datetime64
 
-        if val == NO_DATA:
+        if val == ap.NO_DATA:
             continue
 
         hr = dt.astype(object).hour
