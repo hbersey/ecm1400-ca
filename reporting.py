@@ -34,8 +34,36 @@ def daily_average(data, monitoring_station, pollutant):
 def daily_median(data, monitoring_station, pollutant):
     """Your documentation goes here"""
 
-    # Your code goes here
+    ms_data = data[monitoring_station_index(monitoring_station)]
+    ms_data = select_pollutant(ms_data, pollutant)
 
+    days = [[] for _ in range(365)]
+    dt0 = ms_data[0][0]
+
+    for (dt, val) in ms_data:
+        dt: np.datetime64
+
+        if val == NO_DATA:
+            continue
+
+        i = (dt - dt0) // np.timedelta64(1, 'D')
+        days[i].append(val)
+
+    medians = np.zeros(365)
+    for i, values in enumerate(days):
+
+        values = np.sort(np.array(values))
+        j = len(values) // 2
+
+        if i % 2 == 1:
+            medians[i] = values[j]
+            print(values)
+            print(medians[i], len(values))
+            continue
+
+        medians[i] = (values[j - 1] + values[j]) / 2
+
+    return medians
 
 def hourly_average(data, monitoring_station, pollutant):
     """Your documentation goes here"""
