@@ -1,9 +1,9 @@
-from air_pollution import load_ap_data
+import air_pollution as ap
 import numpy as np
 
 
 def test_load_ap_data():
-    data = load_ap_data()
+    data = ap.load_data()
 
     assert len(data) == 3
     hrl, nk1, my1 = data

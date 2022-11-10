@@ -46,7 +46,7 @@ def __parse_data(f: t.TextIO):
     return data
 
 
-def load_ap_data():
+def load_data():
     all_data = []
     for filename in __FILES:
         path = f"data/{filename}"
