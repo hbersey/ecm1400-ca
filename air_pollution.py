@@ -1,6 +1,6 @@
 import numpy as np
 import numpy.typing as npt
-import typing
+import typing as t
 import csv
 
 
@@ -16,7 +16,7 @@ __NO_DATA_TEXT = "No data"  # Avoids magic string issues
 # APData = npt.ArrayLike[]
 
 
-def __ap_dt(date: typing.AnyStr, time: typing.AnyStr):
+def __ap_dt(date: t.AnyStr, time: t.AnyStr):
     # sort out time format
     # eg. 24:15:00 becomes 00:15:00
     if time[:2] == "24":
@@ -25,13 +25,13 @@ def __ap_dt(date: typing.AnyStr, time: typing.AnyStr):
     return np.datetime64(f"{date}T{time}")
 
 
-def __ap_float(s: typing.AnyStr):
+def __ap_float(s: t.AnyStr):
     if s == __NO_DATA_TEXT:
         return NO_DATA
     return float(s)
 
 
-def __parse_data(f: typing.TextIO):
+def __parse_data(f: t.TextIO):
     data = []
     r = csv.reader(f)
     next(r)  # skip header row
@@ -69,7 +69,7 @@ __MONITORING_STATIONS = {
 }
 
 
-def monitoring_station_index(s: typing.AnyStr):
+def monitoring_station_index(s: t.AnyStr):
     s = s.strip().upper()
     if not s in __MONITORING_STATIONS:
         raise KeyError(f"Monitoring station \"{s}\" was not found.")
@@ -80,7 +80,7 @@ __POLUTANT_INDECIES = {
 }
 
 
-def select_pollutant(data: npt.ArrayLike, pollutant: typing.AnyStr) -> npt.ArrayLike:
+def select_pollutant(data: npt.ArrayLike, pollutant: t.AnyStr) -> npt.ArrayLike:
     if not pollutant in __POLUTANT_INDECIES:
         raise KeyError()
 

@@ -1,7 +1,7 @@
-import typing
+import typing as t
 
 
-def __menu(items: typing.List[typing.Tuple[str, str, typing.Callable]]):
+def __menu(items: t.List[t.Tuple[str, str, t.Callable]]):
     fns = {}
 
     for (option, description, fn) in items:
