@@ -59,17 +59,21 @@ def load_ap_data():
     return np.array(all_data)
 
 
+__MONITORING_STATIONS = {
+    "HARLINGTON": 0,
+    "HRL": 0,
+    "N KENSINGTON": 1,
+    "NK1": 1,
+    "MARYLEBONE ROAD": 2,
+    "MY1": 2
+}
+
+
 def monitoring_station_index(s: typing.AnyStr):
-    # Todo: Replace this fn with something better
-    s = s.upper()
-
-    if s == "HARLINGTON" or s == "HRL":
-        return 0
-    elif s == "N KENSINGTON" or s == "NK1":
-        return 1
-    elif s == "MARYLEBONE ROAD" or s == "MY1":
-        return 2
-
+    s = s.strip().upper()
+    if not s in __MONITORING_STATIONS:
+        raise KeyError(f"Monitoring station \"{s}\" was not found.")
+    return __MONITORING_STATIONS[s]
 
 __POLUTANT_INDECIES = {
     p: i + 1 for (i, p) in enumerate(["no", "pm10", "pm25"])
