@@ -39,7 +39,30 @@ def daily_median(data, monitoring_station, pollutant):
 
 def hourly_average(data, monitoring_station, pollutant):
     """Your documentation goes here"""
-    # Your code goes here
+
+    ms_data = data[monitoring_station_index(monitoring_station)]
+    ms_data = select_pollutant(ms_data, pollutant)
+
+    sigma_n = np.zeros((24, 2))
+    for (dt, val) in ms_data:
+        dt: np.datetime64
+
+        if val == NO_DATA:
+            continue
+
+        hr = dt.astype(object).hour
+        sigma_n[hr][0] += val
+        sigma_n[hr][1] += 1
+
+    res = np.zeros(24)
+    for i in range(24):
+        sigma, n = sigma_n[i]
+        if n == 0.0:  # Should only happen in testing hopefully
+            continue
+
+        res[i] = sigma / n
+
+    return res
 
 
 def monthly_average(data, monitoring_station, pollutant):
