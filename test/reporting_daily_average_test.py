@@ -1,6 +1,7 @@
 from reporting import daily_average
 from air_pollution import NO_DATA
 import numpy as np
+from pytest import raises
 
 __DATA = np.array([
     [
@@ -20,7 +21,8 @@ def test_daily_average():
 
     np.array_equal(daily_average(__DATA, "HRL", "no"), no)
 
-    # assert daily_average(__DATA, "HRL", "pm10") == 12.3
-    # assert daily_average(__DATA, "HRL", "pm25") == 11.4
+    # Test invalid monitoring_station
+    with raises(KeyError) as ms_not_found:
+        daily_average(__DATA, "ABC", "no")
 
-    # TODO: Add tests for throwing exceptions
+    assert ms_not_found.value.args[0] == "Monitoring station \"ABC\" was not found."

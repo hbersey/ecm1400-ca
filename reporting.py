@@ -1,6 +1,8 @@
 from air_pollution import monitoring_station_index, NO_DATA, select_pollutant
 import numpy as np
 
+def __valid_data_or_raise():
+    pass
 
 def daily_average(data, monitoring_station, pollutant):
     """Your documentation goes here"""
