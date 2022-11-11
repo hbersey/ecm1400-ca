@@ -1,14 +1,13 @@
 import air_pollution as ap
 import numpy as np
+import typing as t
 
 
-def daily_average(data, monitoring_station, pollutant):
-    """Your documentation goes here"""
-
+def __mean(data, monitoring_station, pollutant, N: int, get_i: t.Callable[[np.datetime64, np.datetime64], int]):
     ms_data = data[ap.monitoring_station_index(monitoring_station)]
     ms_data = ap.select_pollutant(ms_data, pollutant)
 
-    sigma_n = np.zeros((365, 2))
+    sigma_n = np.zeros((N, 2))
     dt0 = ms_data[0][0]
     for (dt, val) in ms_data:
         dt: np.datetime64
@@ -16,12 +15,12 @@ def daily_average(data, monitoring_station, pollutant):
         if val == ap.NO_DATA:
             continue
 
-        i = (dt - dt0) // np.timedelta64(1, 'D')
+        i = get_i(dt0, dt)
         sigma_n[i][0] += val
         sigma_n[i][1] += 1
 
-    res = np.zeros(365)
-    for i in range(365):
+    res = np.zeros(N)
+    for i in range(N):
         sigma, n = sigma_n[i]
         if n == 0.0:  # Should only happen in testing hopefully
             continue
@@ -29,6 +28,11 @@ def daily_average(data, monitoring_station, pollutant):
         res[i] = sigma / n
 
     return res
+
+
+def daily_average(data, monitoring_station, pollutant):
+    """Your documentation goes here"""
+    return __mean(data, monitoring_station, pollutant, 365, lambda dt0, dt: (dt - dt0) // np.timedelta64(1, 'D'))
 
 
 def daily_median(data, monitoring_station, pollutant):
@@ -65,37 +69,14 @@ def daily_median(data, monitoring_station, pollutant):
 
     return medians
 
+
 def hourly_average(data, monitoring_station, pollutant):
     """Your documentation goes here"""
-
-    ms_data = data[ap.monitoring_station_index(monitoring_station)]
-    ms_data = ap.select_pollutant(ms_data, pollutant)
-
-    sigma_n = np.zeros((24, 2))
-    for (dt, val) in ms_data:
-        dt: np.datetime64
-
-        if val == ap.NO_DATA:
-            continue
-
-        hr = dt.astype(object).hour
-        sigma_n[hr][0] += val
-        sigma_n[hr][1] += 1
-
-    res = np.zeros(24)
-    for i in range(24):
-        sigma, n = sigma_n[i]
-        if n == 0.0:  # Should only happen in testing hopefully
-            continue
-
-        res[i] = sigma / n
-
-    return res
+    return __mean(data, monitoring_station, pollutant, 24, lambda _, dt: dt.astype(object).hour)
 
 
 def monthly_average(data, monitoring_station, pollutant):
     """Your documentation goes here"""
-    # Your code goes here
 
 
 def peak_hour_date(data, date, monitoring_station, pollutant):
