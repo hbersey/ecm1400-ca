@@ -75,6 +75,7 @@ def hourly_average(data, monitoring_station, pollutant):
 
 def monthly_average(data, monitoring_station, pollutant):
     """Your documentation goes here"""
+    return __mean(data, monitoring_station, pollutant, 12, lambda _, dt: dt.month - 1)
 
 
 def peak_hour_date(data, date, monitoring_station, pollutant):
