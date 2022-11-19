@@ -3,20 +3,17 @@ import numpy as np
 import typing as t
 
 
-def __mean(data, monitoring_station, pollutant, N: int, get_i: t.Callable[[np.datetime64, np.datetime64], int]):
-    ms_data = data[ap.monitoring_station_index(monitoring_station)]
-    ms_data = ap.select_pollutant(ms_data, pollutant)
+def __mean(data: ap.TData, monitoring_station: ap.TStation, pollutant: ap.TPollutant, N: int, get_i: t.Callable[[np.datetime64, np.datetime64], int]):
+    ms_data = data[monitoring_station]
 
     sigma_n = np.zeros((N, 2))
-    dt0 = ms_data[0][0]
-    for (dt, val) in ms_data:
-        dt: np.datetime64
-
-        if val == ap.NO_DATA:
+    dt0 = ms_data.first()["dt"]
+    for _, row in ms_data.iterrows():
+        if row[pollutant] == ap.NO_DATA:
             continue
 
-        i = get_i(dt0, dt)
-        sigma_n[i][0] += val
+        i = get_i(dt0, row["dt"])
+        sigma_n[i][0] += row[pollutant]
         sigma_n[i][1] += 1
 
     res = np.zeros(N)
