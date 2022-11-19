@@ -1,13 +1,14 @@
 import air_pollution as ap
 import numpy as np
 import typing as t
+import pandas as pd
 
 
-def __mean(data: ap.TData, monitoring_station: ap.TStation, pollutant: ap.TPollutant, N: int, get_i: t.Callable[[np.datetime64, np.datetime64], int]):
+def __mean(data: ap.TData, monitoring_station: ap.TStation, pollutant: ap.TPollutant, N: int, get_i: t.Callable[[pd.Timestamp, pd.Timestamp], int]):
     ms_data = data[monitoring_station]
 
     sigma_n = np.zeros((N, 2))
-    dt0 = ms_data.first()["dt"]
+    dt0 = ms_data.iloc[0]["dt"]
     for _, row in ms_data.iterrows():
         if row[pollutant] == ap.NO_DATA:
             continue
@@ -29,7 +30,7 @@ def __mean(data: ap.TData, monitoring_station: ap.TStation, pollutant: ap.TPollu
 
 def daily_average(data, monitoring_station, pollutant):
     """Your documentation goes here"""
-    return __mean(data, monitoring_station, pollutant, 365, lambda dt0, dt: (dt - dt0) // np.timedelta64(1, 'D'))
+    return __mean(data, monitoring_station, pollutant, 365, lambda dt0, dt: (dt - dt0) // pd.Timedelta(1, 'D'))
 
 
 def daily_median(data, monitoring_station, pollutant):
@@ -39,7 +40,7 @@ def daily_median(data, monitoring_station, pollutant):
     ms_data = ap.select_pollutant(ms_data, pollutant)
 
     days = [[] for _ in range(365)]
-    dt0 = ms_data[0][0]
+    dt0 = ms_data.iloc[0]["dt"]
 
     for (dt, val) in ms_data:
         dt: np.datetime64
@@ -69,7 +70,7 @@ def daily_median(data, monitoring_station, pollutant):
 
 def hourly_average(data, monitoring_station, pollutant):
     """Your documentation goes here"""
-    return __mean(data, monitoring_station, pollutant, 24, lambda _, dt: dt.astype(object).hour)
+    return __mean(data, monitoring_station, pollutant, 24, lambda _, dt: dt.hour)
 
 
 def monthly_average(data, monitoring_station, pollutant):

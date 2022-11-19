@@ -2,14 +2,15 @@ from reporting import daily_average
 from air_pollution import NO_DATA
 import numpy as np
 from pytest import raises
+import pandas as pd
 
-__DATA = np.array([
-    [
-        [np.datetime64("2022-11-23T00:00"), 10.1, 12.2, 13.2],
-        [np.datetime64("2022-11-23T09:00"), 11.0, 12.4, 9.8],
-        [np.datetime64("2022-11-24T23:00"), 10.4, NO_DATA, 11.2],
-    ]
-])
+__DATA = {
+    "HRL": pd.DataFrame([
+        [pd.Timestamp("2022-11-23T00:00"), 10.1, 12.2, 13.2],
+        [pd.Timestamp("2022-11-23T09:00"), 11.0, 12.4, 9.8],
+        [pd.Timestamp("2022-11-24T23:00"), 10.4, NO_DATA, 11.2],
+    ], columns=["dt", "no", "pm10", "pm25"])
+}
 
 
 def test_daily_average():
@@ -25,4 +26,4 @@ def test_daily_average():
     with raises(KeyError) as ms_not_found:
         daily_average(__DATA, "ABC", "no")
 
-    assert ms_not_found.value.args[0] == "Monitoring station \"ABC\" was not found."
+    assert ms_not_found.value.args[0] == "ABC"
