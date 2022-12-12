@@ -129,12 +129,3 @@ def layout(selected=0):
         returns
 
     return selected
-
-
-def monitoring_dashboard():
-    lh_state = 0
-    while True:
-        lh_state = layout(selected=lh_state)
-
-
-monitoring_dashboard()
