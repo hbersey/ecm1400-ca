@@ -10,21 +10,11 @@ def clear_term():
 def horizontal_rule(cols, char='-'):
     print(char * cols)
 
-
-CLEAR_STYLE = "\033[0m"
-
 CURSOR_UP = "\033[A"
 CURSOR_RIGHT = "\033[C"
 
-# LHAND = [
-#     "Site: NOT SELECTED",
-#     "Species: NOT SELECTED",
-#     "Start Date: NOT SELECTED",
-#     "End Data: NOT SELECTED"
-# ]
 
-
-def home_page():
+def home_page(_):
     return [
         "Welcome to the Air Quality Monitoring System",
         "Navigate the left hand menu using the w and s keys.",
@@ -32,18 +22,25 @@ def home_page():
     ]
 
 
-def exit_page():
+def exit_page(yn_selected):
+    no_btn = "\033[30;47m  No  \033[0m" if yn_selected == 0 else "  No  "
+    yes_btn = "\033[30;47m  YES  \033[0m" if yn_selected == 1 else "  Yes  "
+
+    buttons = no_btn + " " * 8 + yes_btn
+
     return [
         "Are you sure you want to exit?",
+        "",
+        [buttons, 21]
     ]
 
 
 OPTIONS = [
     ["Home", home_page],
-    ["Site", lambda: []],
-    ["Species", lambda: []],
-    ["Start", lambda: []],
-    ["End", lambda: []],
+    ["Site", lambda _: []],
+    ["Species", lambda _: []],
+    ["Start", lambda _: []],
+    ["End", lambda _: []],
     ["Exit", exit_page],
 ]
 OPTION_NAMES = [o[0] for o in OPTIONS]
@@ -89,7 +86,7 @@ def home(selected=0):
 
         style = "\033[1;30;47m" if i == selected else ""
 
-        print(f"| {style}{lh}{CLEAR_STYLE}{lh_space}|{rh_space}|")
+        print(f"| {style}{lh}\033[0m{lh_space}|{rh_space}|")
 
         lines -= 1
 
@@ -101,19 +98,21 @@ def home(selected=0):
     print(f"|{lh_space}|{rh_space}|", end="\r")
 
     horizontal_rule(cols)
-    
+
     (cols, lines) = os.get_terminal_size()
 
     rh_offset = lh_max_size + 5
     rh_size = cols - rh_offset - 1
 
-    rh_lines = OPTIONS[selected][1]()
+    rh_lines = OPTIONS[selected][1](0)
 
     n_cursor_up = (lines - 1 + len(rh_lines)) // 2
     print(CURSOR_UP * n_cursor_up, end="")
 
-    for line in rh_lines:
-        gap = (rh_size - len(line)) // 2
+    for el in rh_lines:
+        line, line_len = (el, len(el)) if type(el) == str else (el[0], el[1])
+
+        gap = (rh_size - line_len) // 2
         print(CURSOR_RIGHT * (rh_offset + gap), end="")
         print(line)
 
@@ -129,9 +128,13 @@ def home(selected=0):
         sys.exit(0)
         returns
 
-    clear_term()
-    home(selected)
+    return selected
 
 
-home()
-clear_term()
+def monitoring_dashboard():
+    lh_state = 0
+    while True:
+        lh_state = home(selected=lh_state)
+
+
+monitoring_dashboard()
