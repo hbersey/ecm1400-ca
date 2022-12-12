@@ -66,7 +66,7 @@ def getch():
             termios.tcsetattr(fd, termios.TCSADRAIN, old)
 
 
-def home(selected=0):
+def layout(selected=0):
     (cols, lines) = os.get_terminal_size()
     clear_term()
 
@@ -134,7 +134,7 @@ def home(selected=0):
 def monitoring_dashboard():
     lh_state = 0
     while True:
-        lh_state = home(selected=lh_state)
+        lh_state = layout(selected=lh_state)
 
 
 monitoring_dashboard()
