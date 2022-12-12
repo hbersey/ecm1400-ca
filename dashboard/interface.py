@@ -50,22 +50,6 @@ EXIT_INDEX = 5
 # https://github.com/joeyespo/py-getch/blob/master/getch/getch.py
 
 
-def getch():
-    try:
-        import msvcrt
-        return msvcrt.getch()
-    except ImportError:
-        import tty
-        import termios
-        fd = sys.stdin.fileno()
-        old = termios.tcgetattr(fd)
-        try:
-            tty.setraw(fd)
-            return sys.stdin.read(1)
-        finally:
-            termios.tcsetattr(fd, termios.TCSADRAIN, old)
-
-
 def layout(selected=0):
     (cols, lines) = os.get_terminal_size()
     clear_term()
@@ -116,16 +100,6 @@ def layout(selected=0):
         print(CURSOR_RIGHT * (rh_offset + gap), end="")
         print(line)
 
-    sel = getch()
-    if sel == "w":
-        selected = max(0, selected - 1)
-    elif sel == "s":
-        selected = min(len(OPTIONS) - 1, selected + 1)
-    elif sel == "d":
-        pass
-    elif sel == "x":
-        clear_term()
-        sys.exit(0)
-        returns
+    
 
     return selected

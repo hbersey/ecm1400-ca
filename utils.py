@@ -55,3 +55,19 @@ def countvalue(values, x):
         if type(el) == type(x) and el == x:
             n += 1
     return n
+
+def getch():
+    try:
+        import msvcrt
+        return msvcrt.getch()
+    except ImportError:
+        import tty
+        import termios
+        import sys
+        fd = sys.stdin.fileno()
+        old = termios.tcgetattr(fd)
+        try:
+            tty.setraw(fd)
+            return sys.stdin.read(1)
+        finally:
+            termios.tcsetattr(fd, termios.TCSADRAIN, old)

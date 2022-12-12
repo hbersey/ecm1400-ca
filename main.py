@@ -1,5 +1,5 @@
 import typing as t
-
+from dashboard.dashboard import Dashboard
 
 def __menu(items: t.List[t.Tuple[str, str, t.Callable]]):
     fns = {}
@@ -33,7 +33,8 @@ def reporting_menu():
 
 def monitoring_menu():
     """Your documentation goes here"""
-    # Your code goes here
+    d = Dashboard()
+    d.run()
 
 
 def intelligence_menu():
@@ -51,4 +52,5 @@ def quit():
 
 
 if __name__ == '__main__':
-    main_menu()
+    # main_menu()
+    monitoring_menu()
