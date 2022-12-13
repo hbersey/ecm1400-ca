@@ -2,6 +2,7 @@ import dashboard.interface as if_
 from dashboard.panels import *
 from utils import getch
 import sys
+import dashboard.keys as keys
 
 LH = [
     ["Home", HomePanel],
@@ -11,16 +12,6 @@ LH = [
     ["End", HomePanel],
     ["Exit", ExitPanel],
 ]
-
-KEY_W = ord("w")
-KEY_A = ord("a")
-KEY_S = ord("s")
-KEY_D = ord("d")
-
-KEY_X = ord("x")
-
-KEY_ESC = 27
-KEY_ENTER = 13
 
 
 class Dashboard:
@@ -41,13 +32,13 @@ class Dashboard:
         c = getch()
         prev_lh_state = self.__lh_state
 
-        if c == KEY_W:
+        if c == keys.W:
             self.__lh_state = max(0, self.__lh_state - 1)
-        elif c == KEY_S:
+        elif c == keys.S:
             self.__lh_state = min(self.__max_rh_state, self.__lh_state + 1)
-        elif c == KEY_D or c == KEY_ENTER:
+        elif c == keys.D or c == keys.ENTER:
             self.__is_rh = True
-        elif c == KEY_X:
+        elif c == keys.X:
             sys.exit(0)
 
         if prev_lh_state != self.__lh_state:
@@ -56,7 +47,7 @@ class Dashboard:
     def __rh_input(self):
         c = getch()
 
-        if c == KEY_ESC:
+        if c == keys.ESC:
             self.__is_rh = False
 
         self.__rh.handle_input(c)
