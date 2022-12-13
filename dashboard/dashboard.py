@@ -12,6 +12,16 @@ LH = [
     ["Exit", ExitPanel],
 ]
 
+KEY_W = ord("w")
+KEY_A = ord("a")
+KEY_S = ord("s")
+KEY_D = ord("d")
+
+KEY_X = ord("x")
+
+KEY_ESC = 27
+KEY_ENTER = 13
+
 
 class Dashboard:
     __lh_state: int
@@ -31,27 +41,34 @@ class Dashboard:
         c = getch()
         prev_lh_state = self.__lh_state
 
-        if c == "w":
+        if c == KEY_W:
             self.__lh_state = max(0, self.__lh_state - 1)
-        elif c == "s":
+        elif c == KEY_S:
             self.__lh_state = min(self.__max_rh_state, self.__lh_state + 1)
-        elif c == "d":
-            pass
-        elif c == "x":
+        elif c == KEY_D or c == KEY_ENTER:
+            self.__is_rh = True
+        elif c == KEY_X:
             sys.exit(0)
 
         if prev_lh_state != self.__lh_state:
             self.__rh = None
 
+    def __rh_input(self):
+        c = getch()
+
+        if c == KEY_ESC:
+            self.__is_rh = False
+
+        self.__rh.handle_input(c)
+
     def __run(self):
         while True:
-            lh_max_size = if_.layout(LH, self.__lh_state)
+            lh_max_size = if_.layout(LH, self.__lh_state, self.__is_rh)
             if self.__rh is None:
                 self.__rh = LH[self.__lh_state][1]()
             self.__rh.print(lh_max_size)
 
-            if not self.__is_rh:
-                self.__lh_input()
+            (self.__rh_input if self.__is_rh else self.__lh_input)()
 
     @staticmethod
     def run():

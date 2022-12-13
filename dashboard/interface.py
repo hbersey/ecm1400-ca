@@ -8,35 +8,7 @@ def clear_term():
 def horizontal_rule(cols, char='-'):
     print(char * cols)
 
-CURSOR_UP = "\033[A"
-CURSOR_RIGHT = "\033[C"
-
-
-def home_page(_):
-    return [
-        "Welcome to the Air Quality Monitoring System",
-        "Navigate the left hand menu using the w and s keys.",
-        "Then, press d to select the highlighted option, and enter the different pages.",
-    ]
-
-
-def exit_page(yn_selected):
-    no_btn = "\033[30;47m  No  \033[0m" if yn_selected == 0 else "  No  "
-    yes_btn = "\033[30;47m  YES  \033[0m" if yn_selected == 1 else "  Yes  "
-
-    buttons = no_btn + " " * 8 + yes_btn
-
-    return [
-        "Are you sure you want to exit?",
-        "",
-        [buttons, 21]
-    ]
-
-
-# https://github.com/joeyespo/py-getch/blob/master/getch/getch.py
-
-
-def layout(lh, selected):
+def layout(lh, selected, is_rh):
     lh_names = [o[0] for o in lh]
 
     (cols, lines) = os.get_terminal_size()
@@ -56,7 +28,7 @@ def layout(lh, selected):
         lh_space = " " * lh_space_n
         rh_space = " " * (cols - lh_max_size - 5)
 
-        style = "\033[1;30;47m" if i == selected else ""
+        style = "\033[1;30;47m" if (i == selected and is_rh == False) else ""
 
         print(f"| {style}{lh}\033[0m{lh_space}|{rh_space}|")
 

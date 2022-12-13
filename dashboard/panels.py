@@ -3,10 +3,6 @@ import os
 
 
 class DashboardPanel(ABC):
-    @abstractmethod
-    def get_initial_state(self):
-        pass
-
     def print(self, lh_max_size):
         (cols, lines) = os.get_terminal_size()
         rh_offset = lh_max_size + 5
@@ -17,14 +13,15 @@ class DashboardPanel(ABC):
     def _print(self, cols, lines, rh_size, rh_offset):
         pass
 
+    def handle_input(self, c):
+        pass
+
 
 class HomePanel(DashboardPanel):
     __LINES = """Welcome to the Air Quality Monitoring System.
-Navigate the left hand menu using the w and s keys.
-Then, press d to select the highlighted option, and enter the different pages.""".splitlines()
-
-    def get_initial_state(self):
-        return None
+Navigate around using the w, a, s and d keys.
+To select an option, press enter.
+To go back, press the escape key.""".splitlines()
 
     def _print(self, cols, lines, rh_size, rh_offset):
         n_cursor_up = (lines - 1 + len(self.__LINES)) // 2
@@ -38,9 +35,11 @@ Then, press d to select the highlighted option, and enter the different pages.""
 class ExitPanel(DashboardPanel):
     __N_LINES = 3
     __S = "Are you sure you want to exit?"
+    __BTN_GAP = 16
 
-    def get_initial_state(self):
-        return False
+    def __init__(self) -> None:
+        super().__init__()
+        self.yes_selected = False
 
     def _print(self, cols, lines, rh_size, rh_offset):
         n_cursor_up = (lines - 1 + self.__N_LINES) // 2
@@ -48,3 +47,12 @@ class ExitPanel(DashboardPanel):
 
         n_cursor_right = rh_offset + (rh_size - len(self.__S)) // 2
         print(f"\033[{n_cursor_right}C{self.__S}")
+
+        n_cursor_right = rh_offset + (rh_size - self.__BTN_GAP - 13) // 2
+
+        no_btn = "\033[30;47m  No  \033[0m" if not self.yes_selected else "  No  "
+        yes_btn = "\033[30;47m  YES  \033[0m" if self.yes_selected else "  Yes  "
+
+        s = no_btn + " " * self.__BTN_GAP + yes_btn
+
+        print(f"\033[B\033[{n_cursor_right}C{s}")

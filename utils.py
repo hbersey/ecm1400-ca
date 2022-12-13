@@ -47,19 +47,20 @@ def meannvalue(values):
 
 def countvalue(values, x):
     """Your documentation goes here"""
-    
+
     n = 0
     for el in values:
         # not sure if 3.0 shoud be counted as the same as 3. I am not counting it a the moment.
-        # TODO: Follow up 
+        # TODO: Follow up
         if type(el) == type(x) and el == x:
             n += 1
     return n
 
+
 def getch():
     try:
         import msvcrt
-        return msvcrt.getch()
+        c = msvcrt.getch()
     except ImportError:
         import tty
         import termios
@@ -68,6 +69,7 @@ def getch():
         old = termios.tcgetattr(fd)
         try:
             tty.setraw(fd)
-            return sys.stdin.read(1)
+            c = sys.stdin.read(1)
         finally:
             termios.tcsetattr(fd, termios.TCSADRAIN, old)
+    return ord(c)
