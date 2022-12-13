@@ -1,6 +1,7 @@
 import dashboard.interface as if_
 from utils import getch
 import sys
+from dashboard.panels import HomePanel
 
 
 class Dashboard:
@@ -23,12 +24,15 @@ class Dashboard:
             self.__lh_state = max(0, self.__lh_state - 1)
         elif c == "s":
             self.__lh_state = min(self.__max_rh_state, self.__lh_state + 1)
+        elif c == "d":
+            pass
         elif c == "x":
             sys.exit(0)
 
     def __run(self):
         while True:
-            if_.layout(selected=self.__lh_state)
+            lh_max_size = if_.layout(selected=self.__lh_state)
+            HomePanel().print(lh_max_size)
             if not self.__is_rh:
                 self.__lh_input()
 

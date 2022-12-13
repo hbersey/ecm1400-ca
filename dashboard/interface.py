@@ -1,6 +1,4 @@
 import os
-import sys
-
 
 def clear_term():
     cmd = "cls" if os.name == "nt" else "clear"
@@ -83,23 +81,4 @@ def layout(selected=0):
 
     horizontal_rule(cols)
 
-    (cols, lines) = os.get_terminal_size()
-
-    rh_offset = lh_max_size + 5
-    rh_size = cols - rh_offset - 1
-
-    rh_lines = OPTIONS[selected][1](0)
-
-    n_cursor_up = (lines - 1 + len(rh_lines)) // 2
-    print(CURSOR_UP * n_cursor_up, end="")
-
-    for el in rh_lines:
-        line, line_len = (el, len(el)) if type(el) == str else (el[0], el[1])
-
-        gap = (rh_size - line_len) // 2
-        print(CURSOR_RIGHT * (rh_offset + gap), end="")
-        print(line)
-
-    
-
-    return selected
+    return lh_max_size
