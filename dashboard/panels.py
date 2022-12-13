@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
+import sys
 import os
-
+import dashboard.keys as keys
+from dashboard.interface import clear_term
 
 class DashboardPanel(ABC):
     def print(self, lh_max_size):
@@ -56,3 +58,13 @@ class ExitPanel(DashboardPanel):
         s = no_btn + " " * self.__BTN_GAP + yes_btn
 
         print(f"\033[B\033[{n_cursor_right}C{s}")
+
+    def handle_input(self, c):
+        if self.yes_selected:
+            if c == keys.ENTER:
+                clear_term()
+                sys.exit(0)
+            elif c == keys.A:
+                self.yes_selected = False
+        elif c == keys.D and not self.yes_selected:
+            self.yes_selected = True
