@@ -33,32 +33,22 @@ def exit_page(yn_selected):
     ]
 
 
-OPTIONS = [
-    ["Home", home_page],
-    ["Site", lambda _: []],
-    ["Species", lambda _: []],
-    ["Start", lambda _: []],
-    ["End", lambda _: []],
-    ["Exit", exit_page],
-]
-OPTION_NAMES = [o[0] for o in OPTIONS]
-
-EXIT_INDEX = 5
-
 # https://github.com/joeyespo/py-getch/blob/master/getch/getch.py
 
 
-def layout(selected=0):
+def layout(lh, selected):
+    lh_names = [o[0] for o in lh]
+
     (cols, lines) = os.get_terminal_size()
     clear_term()
 
     horizontal_rule(cols)
     lines -= 1
 
-    lh_max_size = len(sorted(OPTION_NAMES, key=len, reverse=True)[
+    lh_max_size = len(sorted(lh_names, key=len, reverse=True)[
                       0]) + len(": NOT SELECTED")
 
-    for i, lh_name in enumerate(OPTION_NAMES):
+    for i, lh_name in enumerate(lh_names):
         lh_selected_text = "SELECTED" if i == selected else "NOT SELECTED"
         lh = f"{lh_name}: {lh_selected_text}"
 

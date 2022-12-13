@@ -36,5 +36,15 @@ Then, press d to select the highlighted option, and enter the different pages.""
 
 
 class ExitPanel(DashboardPanel):
+    __N_LINES = 3
+    __S = "Are you sure you want to exit?"
+
     def get_initial_state(self):
         return False
+
+    def _print(self, cols, lines, rh_size, rh_offset):
+        n_cursor_up = (lines - 1 + self.__N_LINES) // 2
+        print(f"\033[{n_cursor_up}A")
+
+        n_cursor_right = rh_offset + (rh_size - len(self.__S)) // 2
+        print(f"\033[{n_cursor_right}C{self.__S}")
