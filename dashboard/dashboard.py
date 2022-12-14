@@ -6,10 +6,7 @@ import dashboard.keys as keys
 
 LH = [
     ["Home", HomePanel],
-    ["Site", HomePanel],
-    ["Species", HomePanel],
-    ["Start", HomePanel],
-    ["End", HomePanel],
+    ["Options", OptionsPanel],
     ["Exit", ExitPanel],
 ]
 

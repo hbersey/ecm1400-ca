@@ -1,3 +1,6 @@
+import typing as t
+
+
 def all_numerical_or_raise(values):
     if not all(map(lambda el: isinstance(el, (int, float)), values)):
         raise TypeError
@@ -73,3 +76,22 @@ def getch():
         finally:
             termios.tcsetattr(fd, termios.TCSADRAIN, old)
     return ord(c)
+
+
+T = t.TypeVar("T")
+
+
+def parse_or_none(fn: t.Callable, s: t.Optional[str]) -> T:
+    if s == None or len(s) == 0:
+        return None
+
+    try:
+        return fn(s)
+    except ValueError:
+        return None
+
+
+def or_none(s: t.Optional[str]) -> t.Optional[str]:
+    if s == None or len(s) == 0:
+        return None
+    return s

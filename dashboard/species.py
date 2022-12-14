@@ -11,23 +11,25 @@ class Species:
     health_effect: str
     info_link: str
 
+    @staticmethod
+    def parse(json):
+        return Species(
+            code=json["@SpeciesCode"],
+            name=json["@SpeciesName"],
+            description=json["@Description"],
+            health_effect=json["@HealthEffect"],
+            info_link=json["@Link"],
+        )
 
-def get_species() -> t.List[Species]:
-    res = requests.get(
-        "http://api.erg.ic.ac.uk/AirQuality/Information/Species/Json")
-    json = res.json()
+    @staticmethod
+    def get_species() -> t.List["Species"]:
+        res = requests.get(
+            "http://api.erg.ic.ac.uk/AirQuality/Information/Species/Json")
+        json = res.json()
 
-    # Todo check for errors
+        # Todo check for errors
 
-    species: t.List[Species] = []
+        species: t.List[Species] = []
 
-    for el in json["AirQualitySpecies"]["Species"]:
-        species.append(Species(
-            code=el["@SpeciesCode"],
-            name=el["@SpeciesName"],
-            description=el["@Description"],
-            health_effect=el["@HealthEffect"],
-            info_link=el["@Link"],
-        ))
-
-    return species
+        for el in json["AirQualitySpecies"]["Species"]:
+            species.append(Species.parse(el))
