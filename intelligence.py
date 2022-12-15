@@ -49,5 +49,3 @@ def detect_connected_components(*args, **kwargs):
 def detect_connected_components_sorted(*args, **kwargs):
     """Your documentation goes here"""
     # Your code goes here
-
-find_cyan_pixels("data/map.png")
