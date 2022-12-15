@@ -4,7 +4,27 @@ import typing as t
 import pandas as pd
 
 
-def __mean(data: ap.TData, monitoring_station: ap.TStation, pollutant: ap.TPollutant, N: int, get_i: t.Callable[[pd.Timestamp, pd.Timestamp], int]):
+def __mean(data: ap.TData, monitoring_station: ap.TStation, pollutant: ap.TPollutant, N: int, get_i: t.Callable[[pd.Timestamp, pd.Timestamp], int]) -> float:
+    """
+    Calculate the mean of a pollutant for a monitoring station over a regular interval.
+
+    Parameters
+    ----------
+    data: ap.TData
+        All monitoring station data
+    monitoring_station: ap.TStation
+        The monitoring station being used
+    pollutant: ap.TPollutant
+        The pollutant being calculated
+    N:
+        Size of output array
+    get_i: function, takes (pd.Timestamp, pd.Timestamp) and returns int 
+        Function to get the index of the output array from the start date and the current date 
+
+    Returns
+    -------
+    float
+    """
     ms_data = data[monitoring_station]
 
     sigma_n = np.zeros((N, 2))
