@@ -94,9 +94,9 @@ class LRSelect:
             f"\n\033[{rh_offset}C{larrow} {item_style} {item} \033[0m {rarrow}"),
 
     def handle_input(self, c):
-        if c == keys.D:
+        if c == keys.D and self.selected < (len(self.items) - 1):
             self.selected += 1
-        elif c == keys.A:
+        elif c == keys.A and self.selected > 0:
             self.selected -= 1
 
 
@@ -115,7 +115,8 @@ class OptionsPanel(DashboardPanel):
         self.selected_group = 0
 
         # self.sites = Site.get_site("All")
-        self.sites = [Site(None, None, None, "Hello, World!", None, None, None, None, None, None, None, None, None, None, None)]
+        self.sites = [Site(None, None, None, "Hello, World!", None,
+                           None, None, None, None, None, None, None, None, None, None)]
         self.site_select = LRSelect([site.name for site in self.sites])
 
         self.species = Species.get_species()
