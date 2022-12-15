@@ -21,16 +21,24 @@ def find_red_pixels(map_filename, upper_threshold=100, lower_threshold=50):
     """Your documentation goes here"""
 
     im = __find_pixel(map_filename, lambda r, g, b:
-        r > upper_threshold
-        and g < lower_threshold
-        and b < lower_threshold)
+                      r > upper_threshold
+                      and g < lower_threshold
+                      and b < lower_threshold)
 
     imsave("map-red-pixels.jpg", im)
     return im
 
 
-def find_cyan_pixels(*args, **kwargs):
+def find_cyan_pixels(map_filename, upper_threshold=100, lower_threshold=50):
     """Your documentation goes here"""
+
+    im = __find_pixel(map_filename, lambda r, g, b:
+                      r < lower_threshold
+                      and g > upper_threshold
+                      and b > upper_threshold)
+
+    imsave("map-cyan-pixels.jpg", im)
+    return im
 
 
 def detect_connected_components(*args, **kwargs):
@@ -41,3 +49,5 @@ def detect_connected_components(*args, **kwargs):
 def detect_connected_components_sorted(*args, **kwargs):
     """Your documentation goes here"""
     # Your code goes here
+
+find_cyan_pixels("data/map.png")
