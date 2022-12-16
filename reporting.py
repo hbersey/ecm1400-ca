@@ -86,7 +86,7 @@ def daily_median(data: ap.TData, monitoring_station: ap.TStation, pollutant: ap.
     Returns
     -------
     list of float (size 365)
-        the daily medians
+        the daily medians. Returns zero if there is no data for a day.
     """
 
     ms_data = data[monitoring_station]
@@ -98,7 +98,7 @@ def daily_median(data: ap.TData, monitoring_station: ap.TStation, pollutant: ap.
         dt: np.datetime64 = row["dt"]
         val: float = row[pollutant]
 
-        if val == ap.NO_DATA:
+        if val == ap.NO_DATA_TEXT:
             continue
 
         i = (dt - dt0) // np.timedelta64(1, 'D')
@@ -110,7 +110,8 @@ def daily_median(data: ap.TData, monitoring_station: ap.TStation, pollutant: ap.
         values = np.sort(np.array(values))
         
         if len(values) == 0:
-            medians[i] = ap.NO_DATA
+            # TODO: Research: "Is this the right thing to do. OR should I raise an error?"
+            medians[i] = 0
             continue
 
         j = len(values) // 2

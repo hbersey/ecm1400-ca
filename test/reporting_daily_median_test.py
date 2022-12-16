@@ -1,5 +1,5 @@
 from reporting import daily_median
-from air_pollution import NO_DATA
+from air_pollution import NO_DATA_TEXT
 import pandas as pd
 from pytest import raises
 
@@ -8,8 +8,8 @@ __DATA = {
         [
             [pd.Timestamp("2022-11-23T00:00"), 10.0, 10.0, 10.0],
             [pd.Timestamp("2022-11-23T01:00"), 11.0, 11.0, 12.0],
-            [pd.Timestamp("2022-11-23T02:00"), 11.0, 12.0, NO_DATA],
-            [pd.Timestamp("2022-11-23T03:00"), 12.0, 13.0, NO_DATA],
+            [pd.Timestamp("2022-11-23T02:00"), 11.0, 12.0, NO_DATA_TEXT],
+            [pd.Timestamp("2022-11-23T03:00"), 12.0, 13.0, NO_DATA_TEXT],
         ],
         columns=["dt", "no", "pm10", "pm25"]
     )
@@ -23,7 +23,7 @@ def test_daily_median():
     assert daily_median(__DATA, "TEST", "pm25")[0] == 11.0
 
     # Test no data
-    assert daily_median(__DATA, "TEST", "no")[1] == NO_DATA
+    assert daily_median(__DATA, "TEST", "no")[1] == 0.0
 
     # Test invalid data
     with raises(KeyError):
