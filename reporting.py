@@ -1,5 +1,6 @@
 import air_pollution as ap
 import numpy as np
+import numpy.typing as npt
 import typing as t
 import pandas as pd
 
@@ -48,13 +49,45 @@ def __mean(data: ap.TData, monitoring_station: ap.TStation, pollutant: ap.TPollu
     return res
 
 
-def daily_average(data, monitoring_station, pollutant):
-    """Your documentation goes here"""
+def daily_average(data: ap.TData, monitoring_station: ap.TStation, pollutant: ap.TPollutant) -> npt.NDArray[np.float]:
+    """
+    Returns the daily (mean) averages for a given monitoring station and pollutant.
+
+    Parameters
+    ----------
+    data: ap.TData
+        All monitoring station data
+    monitoring_station: ap.TStation
+        The monitoring station being used
+    pollutant: ap.TPollutant
+        The pollutant being calculated
+
+    Returns
+    -------
+    list of float (size 365)
+        the daily averages
+    """
     return __mean(data, monitoring_station, pollutant, 365, lambda dt0, dt: (dt - dt0) // pd.Timedelta(1, 'D'))
 
 
-def daily_median(data, monitoring_station, pollutant):
-    """Your documentation goes here"""
+def daily_median(data: ap.TData, monitoring_station: ap.TStation, pollutant: ap.TPollutant):
+    """
+    Returns the daily medians for a given monitoring station and pollutant.
+
+    Parameters
+    ----------
+    data: ap.TData
+        All monitoring station data
+    monitoring_station: ap.TStation
+        The monitoring station being used
+    pollutant: ap.TPollutant
+        The pollutant being calculated
+
+    Returns
+    -------
+    list of float (size 365)
+        the daily medians
+    """
 
     ms_data = data[ap.monitoring_station_index(monitoring_station)]
     ms_data = ap.select_pollutant(ms_data, pollutant)
@@ -88,23 +121,91 @@ def daily_median(data, monitoring_station, pollutant):
     return medians
 
 
-def hourly_average(data, monitoring_station, pollutant):
-    """Your documentation goes here"""
+def hourly_average(data: ap.TData, monitoring_station: ap.TStation, pollutant: ap.TPollutant) -> npt.NDArray[np.float]:
+    """
+    Returns the hourly (mean) averages for a given monitoring station and pollutant.
+
+    Parameters
+    ----------
+    data: ap.TData
+        All monitoring station data
+    monitoring_station: ap.TStation
+        The monitoring station being used
+    pollutant: ap.TPollutant
+        The pollutant being calculated
+
+    Returns
+    -------
+    list of float (size 24)
+        the hourly averages
+    """
     return __mean(data, monitoring_station, pollutant, 24, lambda _, dt: dt.hour)
 
 
-def monthly_average(data, monitoring_station, pollutant):
-    """Your documentation goes here"""
+def monthly_average(data: ap.TData, monitoring_station: ap.TStation, pollutant: ap.TPollutant) -> npt.NDArray[np.float]:
+    """
+    Returns the monthly (mean) averages for a given monitoring station and pollutant.
+
+    Parameters
+    ----------
+    data: ap.TData
+        All monitoring station data
+    monitoring_station: ap.TStation
+        The monitoring station being used
+    pollutant: ap.TPollutant
+        The pollutant being calculated
+
+    Returns
+    -------
+    list of float (size 24)
+        the monthly averages
+    """
     return __mean(data, monitoring_station, pollutant, 12, lambda _, dt: dt.month - 1)
 
 
-def peak_hour_date(data, date, monitoring_station, pollutant):
-    """Your documentation goes here"""
-    # Your code goes here
+# Maybe pd.timestamp isn't the best type for this
+def peak_hour_date(data: ap.TData, date: pd.Timestamp, monitoring_station: ap.TStation, pollutant: ap.TPollutant) -> int:
+    """
+    Returns the hour of the given date with the highest level of the given pollutant.
+
+    Parameters
+    ----------
+    data: ap.TData
+        All monitoring station data
+    date: pd.Timestamp
+        The date to check
+    monitoring_station: ap.TStation
+        The monitoring station being used
+    pollutant: ap.TPollutant
+        The pollutant being calculated
+
+    Returns
+    -------
+    int
+        The hour of the day with the highest level of the given pollutant
+    """
+    # TODO
 
 
-def count_missing_data(data: ap.TData,  monitoring_station: ap.TStation, pollutant: ap.TPollutant):
-    """Your documentation goes here"""
+def count_missing_data(data: ap.TData,  monitoring_station: ap.TStation, pollutant: ap.TPollutant) -> int:
+    """
+    Returns the number of missing data points for a given monitoring station and pollutant.
+
+    Parameters
+    ----------
+    data: ap.TData
+        All monitoring station data
+    monitoring_station: ap.TStation
+        The monitoring station being used
+    pollutant: ap.TPollutant
+        The pollutant being calculated
+
+    Returns
+    -------
+    int
+        The number of missing data points
+
+    """
 
     values = data[monitoring_station][pollutant]
 
@@ -116,7 +217,26 @@ def count_missing_data(data: ap.TData,  monitoring_station: ap.TStation, polluta
     return n
 
 
-def fill_missing_data(data, new_value,  monitoring_station, pollutant):
-    """Your documentation goes here"""
+# Not sure what type is best of new_value
+def fill_missing_data(data: ap.TData, new_value: t.Any,  monitoring_station: ap.TStation, pollutant: ap.TPollutant) -> ap.TData:
+    """
+    Returns the data with the missing data points filled with the given value.
 
-    # Your code goes here
+    Parameters
+    ----------
+    data: ap.TData
+        All monitoring station data
+    new_value: t.Any
+        The value to fill the missing data points with
+    monitoring_station: ap.TStation
+        The monitoring station being used
+    pollutant: ap.TPollutant
+        The pollutant being calculated
+
+    Returns
+    -------
+    ap.TData
+        The data with the missing data points filled with the given value
+    """
+
+    # TODO
