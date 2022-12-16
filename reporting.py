@@ -248,7 +248,7 @@ def fill_missing_data(data: ap.TData, new_value: t.Any,  monitoring_station: ap.
     ----------
     data: ap.TData
         All monitoring station data
-    new_value: t.Any
+    new_value: any (preferably float)
         The value to fill the missing data points with
     monitoring_station: ap.TStation
         The monitoring station being used
@@ -261,4 +261,14 @@ def fill_missing_data(data: ap.TData, new_value: t.Any,  monitoring_station: ap.
         The data with the missing data points filled with the given value
     """
 
-    # TODO
+    updated_df = data[monitoring_station].copy()
+    for i, row in updated_df.iterrows():
+        if row[pollutant] == ap.NO_DATA_TEXT:
+            updated_df.at[i, pollutant] = new_value
+
+    new_data = {
+        **data,
+        monitoring_station: updated_df
+    }
+
+    return new_data
