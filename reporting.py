@@ -31,7 +31,7 @@ def __mean(data: ap.TData, monitoring_station: ap.TStation, pollutant: ap.TPollu
     sigma_n = np.zeros((N, 2))
     dt0 = ms_data.iloc[0]["dt"]
     for _, row in ms_data.iterrows():
-        if row[pollutant] == ap.NO_DATA:
+        if row[pollutant] == ap.NO_DATA_TEXT:
             continue
 
         i = get_i(dt0, row["dt"])

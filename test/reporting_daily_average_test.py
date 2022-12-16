@@ -1,5 +1,5 @@
 from reporting import daily_average
-from air_pollution import NO_DATA
+from air_pollution import NO_DATA_TEXT
 import numpy as np
 from pytest import raises
 import pandas as pd
@@ -8,7 +8,7 @@ __DATA = {
     "HRL": pd.DataFrame([
         [pd.Timestamp("2022-11-23T00:00"), 10.1, 12.2, 13.2],
         [pd.Timestamp("2022-11-23T09:00"), 11.0, 12.4, 9.8],
-        [pd.Timestamp("2022-11-24T23:00"), 10.4, NO_DATA, 11.2],
+        [pd.Timestamp("2022-11-24T23:00"), 10.4, NO_DATA_TEXT, 11.2],
     ], columns=["dt", "no", "pm10", "pm25"])
 }
 
