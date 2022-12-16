@@ -17,8 +17,8 @@ def __find_pixel(map_filename, fn):
     return im
 
 
-def find_red_pixels(map_filename, upper_threshold=100, lower_threshold=50):
-    """Your documentation goes here"""
+def find_red_pixels(map_filename: str, upper_threshold: int = 100, lower_threshold: int = 50) -> npt.NDArray[npt.uint8]:
+    """Returns a binary image with the red pixels of the map."""
 
     im = __find_pixel(map_filename, lambda r, g, b:
                       r > upper_threshold
@@ -29,7 +29,7 @@ def find_red_pixels(map_filename, upper_threshold=100, lower_threshold=50):
     return im
 
 
-def find_cyan_pixels(map_filename, upper_threshold=100, lower_threshold=50):
+def find_cyan_pixels(map_filename, upper_threshold=100, lower_threshold=50) -> npt.NDArray[npt.uint8]:
     """Your documentation goes here"""
 
     im = __find_pixel(map_filename, lambda r, g, b:
