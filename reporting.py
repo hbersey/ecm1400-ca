@@ -89,14 +89,14 @@ def daily_median(data: ap.TData, monitoring_station: ap.TStation, pollutant: ap.
         the daily medians
     """
 
-    ms_data = data[ap.monitoring_station_index(monitoring_station)]
-    ms_data = ap.select_pollutant(ms_data, pollutant)
+    ms_data = data[monitoring_station]
 
     days = [[] for _ in range(365)]
     dt0 = ms_data.iloc[0]["dt"]
 
-    for (dt, val) in ms_data:
-        dt: np.datetime64
+    for _, row in ms_data.iterrows():
+        dt: np.datetime64 = row["dt"]
+        val: float = row[pollutant]
 
         if val == ap.NO_DATA:
             continue
@@ -104,10 +104,15 @@ def daily_median(data: ap.TData, monitoring_station: ap.TStation, pollutant: ap.
         i = (dt - dt0) // np.timedelta64(1, 'D')
         days[i].append(val)
 
-    medians = np.zeros(365)
+    medians = np.zeros((365, 1))
     for i, values in enumerate(days):
 
         values = np.sort(np.array(values))
+        
+        if len(values) == 0:
+            medians[i] = ap.NO_DATA
+            continue
+
         j = len(values) // 2
 
         if i % 2 == 1:
