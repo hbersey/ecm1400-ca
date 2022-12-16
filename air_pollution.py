@@ -2,8 +2,7 @@ import pandas as pd
 import typing as t
 
 
-NO_DATA = -1.0
-__NO_DATA_TEXT = "No data"  # Avoids magic string issues
+NO_DATA_TEXT = "No data"  # Avoids magic string issues
 
 TStation = t.Literal["HRL", "MY1", "NK1"]
 TPollutant = t.Literal["no", "pm10", "pm25"]
@@ -20,14 +19,13 @@ def __ap_dt(date: t.AnyStr, time: t.AnyStr):
 
 
 def __ap_float(s: t.AnyStr):
-    if s == __NO_DATA_TEXT:
-        return NO_DATA
+    if s == NO_DATA_TEXT:
+        return s
     return float(s)
 
 
 def __read_csv(filename):
-    return pd.read_csv(f"data/{filename}", parse_dates={"dt": ["date", "time"]}, date_parser=__ap_dt,
-                       na_values=__NO_DATA_TEXT, converters={3: __ap_float, 4: __ap_float, 5: __ap_float})
+    return pd.read_csv(f"data/{filename}", parse_dates={"dt": ["date", "time"]}, date_parser=__ap_dt, converters={3: __ap_float, 4: __ap_float, 5: __ap_float})
 
 
 def load_data():
@@ -40,3 +38,7 @@ def load_data():
         "MY1": my1,
         "NK1": nk1
     }
+
+
+d = load_data()
+print(d["HRL"].iloc[150:160, :])
