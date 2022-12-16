@@ -49,7 +49,7 @@ def __mean(data: ap.TData, monitoring_station: ap.TStation, pollutant: ap.TPollu
     return res
 
 
-def daily_average(data: ap.TData, monitoring_station: ap.TStation, pollutant: ap.TPollutant) -> npt.NDArray[np.float]:
+def daily_average(data: ap.TData, monitoring_station: ap.TStation, pollutant: ap.TPollutant) -> npt.NDArray[np.float64]:
     """
     Returns the daily (mean) averages for a given monitoring station and pollutant.
 
@@ -126,7 +126,7 @@ def daily_median(data: ap.TData, monitoring_station: ap.TStation, pollutant: ap.
     return medians
 
 
-def hourly_average(data: ap.TData, monitoring_station: ap.TStation, pollutant: ap.TPollutant) -> npt.NDArray[np.float]:
+def hourly_average(data: ap.TData, monitoring_station: ap.TStation, pollutant: ap.TPollutant) -> npt.NDArray[np.float64]:
     """
     Returns the hourly (mean) averages for a given monitoring station and pollutant.
 
@@ -147,7 +147,7 @@ def hourly_average(data: ap.TData, monitoring_station: ap.TStation, pollutant: a
     return __mean(data, monitoring_station, pollutant, 24, lambda _, dt: dt.hour)
 
 
-def monthly_average(data: ap.TData, monitoring_station: ap.TStation, pollutant: ap.TPollutant) -> npt.NDArray[np.float]:
+def monthly_average(data: ap.TData, monitoring_station: ap.TStation, pollutant: ap.TPollutant) -> npt.NDArray[np.float64]:
     """
     Returns the monthly (mean) averages for a given monitoring station and pollutant.
 
