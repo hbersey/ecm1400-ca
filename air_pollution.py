@@ -29,7 +29,7 @@ def __ap_float(s: t.AnyStr):
 
 def __read_csv(filename):
     data_df = pd.read_csv(
-        f"data/{filename}", converters={3: __ap_float, 4: __ap_float, 5: __ap_float})
+        f"data/{filename}", converters={"no": __ap_float, "pm10": __ap_float, "pm25": __ap_float})
     dt_df = data_df.apply(lambda row: __ap_dt(
         row["date"], row["time"]), axis=1)
     return pd.concat([dt_df.rename("dt"), data_df.drop(["date", "time"], axis=1)], axis=1)
