@@ -1,14 +1,14 @@
 import pandas as pd
-from air_pollution import NO_DATA
+from air_pollution import NO_DATA_TEXT
 from reporting import count_missing_data
 import pytest
 
 __DATA = {
     "TEST": pd.DataFrame([
-        [pd.Timestamp("2022-11-23T00:00"), 10.0, 10.0, NO_DATA],
-        [pd.Timestamp("2022-11-23T00:00"), 10.0, NO_DATA, NO_DATA],
-        [pd.Timestamp("2022-11-23T00:00"), 10.0, 10.0, NO_DATA],
-        [pd.Timestamp("2022-11-23T00:00"), 10.0, 10.0, NO_DATA],
+        [pd.Timestamp("2022-11-23T00:00"), 10.0, 10.0, NO_DATA_TEXT],
+        [pd.Timestamp("2022-11-23T00:00"), 10.0, NO_DATA_TEXT, NO_DATA_TEXT],
+        [pd.Timestamp("2022-11-23T00:00"), 10.0, 10.0, NO_DATA_TEXT],
+        [pd.Timestamp("2022-11-23T00:00"), 10.0, 10.0, NO_DATA_TEXT],
     ], columns=["dt", "no", "pm10", "pm25"])
 }
 

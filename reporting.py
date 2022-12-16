@@ -216,7 +216,7 @@ def count_missing_data(data: ap.TData,  monitoring_station: ap.TStation, polluta
 
     n = 0
     for item in values:
-        if item == ap.NO_DATA:
+        if item == ap.NO_DATA_TEXT:
             n += 1
 
     return n
