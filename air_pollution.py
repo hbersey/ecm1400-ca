@@ -23,9 +23,16 @@ def __ap_float(s: t.AnyStr):
         return s
     return float(s)
 
+# Not as efficient as it could be, but it's pandas didn't like my pervious solution:
+# https://github.com/hbersey/ecm1400-ca/commit/272604370eca72bbc978b7590b8d0d8dda04d89c
+
 
 def __read_csv(filename):
-    return pd.read_csv(f"data/{filename}", parse_dates={"dt": ["date", "time"]}, date_parser=__ap_dt, converters={3: __ap_float, 4: __ap_float, 5: __ap_float})
+    data_df = pd.read_csv(
+        f"data/{filename}", converters={3: __ap_float, 4: __ap_float, 5: __ap_float})
+    dt_df = data_df.apply(lambda row: __ap_dt(
+        row["date"], row["time"]), axis=1)
+    return pd.concat([dt_df.rename("dt"), data_df.drop(["date", "time"], axis=1)], axis=1)
 
 
 def load_data():
@@ -38,7 +45,3 @@ def load_data():
         "MY1": my1,
         "NK1": nk1
     }
-
-
-d = load_data()
-print(d["HRL"].iloc[150:160, :])
