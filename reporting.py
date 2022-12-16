@@ -108,7 +108,7 @@ def daily_median(data: ap.TData, monitoring_station: ap.TStation, pollutant: ap.
     for i, values in enumerate(days):
 
         values = np.sort(np.array(values))
-        
+
         if len(values) == 0:
             # TODO: Research: "Is this the right thing to do. OR should I raise an error?"
             medians[i] = 0
@@ -190,7 +190,23 @@ def peak_hour_date(data: ap.TData, date: pd.Timestamp, monitoring_station: ap.TS
     int
         The hour of the day with the highest level of the given pollutant
     """
-    # TODO
+
+    day = data[monitoring_station][data[monitoring_station]
+                                   ["dt"].dt.date == date.date()]
+
+    hr = -1
+    max_ = -1.0
+
+    for _, row in day.iterrows():
+        val = row[pollutant]
+
+        if val == ap.NO_DATA_TEXT:
+            continue
+        elif val > max_:
+            hr = row["dt"].hour
+            max_ = val
+
+    return hr
 
 
 def count_missing_data(data: ap.TData,  monitoring_station: ap.TStation, pollutant: ap.TPollutant) -> int:
