@@ -1,4 +1,5 @@
 import typing as t
+import numpy as np
 
 Numeric = t.Union[int, float]
 
@@ -196,3 +197,43 @@ def or_none(s: t.Optional[str]) -> t.Optional[str]:
     if s == None or len(s) == 0:
         return None
     return s
+
+
+class NDQueue:
+    def __init__(self, initial_size=16, growth_factor=1.5, dtype=None):
+        self.__items = np.zeros(initial_size, dtype=dtype)
+        self.__tail = 0
+        self.__head = 0
+        self.__growth_factor = growth_factor
+        self.__dtype = dtype
+
+    def enqueue(self, item):
+        if self.__tail == len(self.__items):
+            if self.__head > 0:
+                self.__items[: self.__tail -
+                             self.__head] = self.__items[self.__head: self.__tail]
+                self.__tail -= self.__head
+                self.__head = 0
+            else:
+                new_size = int(len(self.__items) * self.__growth_factor)
+                new_items = np.zeros(new_size, dtype=self.__dtype)
+                new_items[: len(self.__items)] = self.__items
+                self.__items = new_items
+
+        try:
+            self.__items[self.__tail] = item
+        except ValueError:
+            raise ValueError(
+                f"Item must be of type {self.dtype}, not {type(item)}")
+
+        self.__tail += 1
+
+    def dequeue(self):
+        if self.__head == self.__tail:
+            raise IndexError("Queue is empty")
+        item = self.__items[self.__head]
+        self.__head += 1
+        return item
+
+    def is_empty(self):
+        return self.__head == self.__tail

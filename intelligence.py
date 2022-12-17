@@ -1,7 +1,7 @@
 from skimage.io import imread, imsave
 import numpy.typing as npt
 import numpy as np
-from queue import Queue
+from utils import NDQueue
 
 
 def __find_pixel(map_filename, fn):
@@ -45,24 +45,36 @@ def find_cyan_pixels(map_filename, upper_threshold=100, lower_threshold=50) -> n
 def detect_connected_components(IMG: npt.NDArray[np.uint]):
     """Your documentation goes here"""
 
-    MARK = np.zeros(IMG.shape, dtype=np.uint8)
-    Q = Queue()
+    f = open("cc-output-2a.txt", "w")
 
-    for x, y in np.ndindex(IMG.shape):
-        if IMG[x, y] == 255 and MARK[x, y] == 0:
-            MARK[x, y] = 1
-            Q.put((x, y))
-            while not Q.empty():
-                m, n = Q.get()
-                for s in range(m - 1, m + 2):
-                    for t in range(n - 1, n + 2):
-                        if (s == m and t == n) or s < 0 or s >= IMG.shape[0] or t < 0 or t >= IMG.shape[1]:
+    marked = np.zeros(IMG.shape, dtype=np.uint8)
+    queue = NDQueue(initial_size=32, dtype="2u2")
+
+    component_n = 0
+    for p_x, p_y in np.ndindex(IMG.shape):
+        if IMG[p_x, p_y] == 255 and marked[p_x, p_y] == 0:
+            marked[p_x, p_y] = 1
+            queue.enqueue((p_x, p_y))
+
+            pixels_n = 0
+            component_n += 1
+
+            while not queue.is_empty():
+                pixels_n += 1
+                q_m, q_n = queue.dequeue()
+                for n_s in range(q_m - 1, q_m + 2):
+                    for n_t in range(q_n - 1, q_n + 2):
+                        if (n_s == q_m and n_t == q_n) or n_s < 0 or n_s >= IMG.shape[0] or n_t < 0 or n_t >= IMG.shape[1]:
                             continue
-                        if IMG[s, t] == 255 and MARK[s, t] == 0:
-                            MARK[s, t] = 1
-                            Q.put((s, t))
+                        if IMG[n_s, n_t] == 255 and marked[n_s, n_t] == 0:
+                            marked[n_s, n_t] = 1
+                            queue.enqueue((n_s, n_t))
+            f.write(
+                f"Connected Component {component_n}, number of pixels = {pixels_n}\n")
 
-    return MARK
+    f.write(f"Total number of connected components = {component_n}\n")
+    f.close()
+    return marked
 
 
 def detect_connected_components_sorted(*args, **kwargs):
