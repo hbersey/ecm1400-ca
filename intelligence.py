@@ -2,9 +2,31 @@ from skimage.io import imread, imsave
 import numpy.typing as npt
 import numpy as np
 from utils import NDQueue
+import typing as t
 
 
-def __find_pixel(map_filename, fn):
+def __find_pixel(map_filename: str, fn: t.Callable[[int, int, int], bool]) -> npt.NDArray[np.float16]:
+    """
+    Returns a binary image with the pixels of the map that match the given function, ``fn``.
+
+    Parameters
+    ----------
+    map_filename: str
+        The filename of the map image
+    fn: Callable[[int, int, int], bool]
+        A function that takes the red, green and blue values of a pixel and returns True if the pixel is over the threshold
+
+    Returns
+    -------
+    np.ndarray
+        A binary image with the pixels of the map that match the given function. 
+        (255 for White, 0 for Black)
+
+    See Also
+    --------
+    ``find_red_pixels`` : Finds the red pixels of the map, uses this function.
+    ``find_cyan_pixels`` : Finds the cyan pixels of the map, uses this function.
+    """
     map: npt.NDArray = imread(map_filename)
     width, height, _ = map.shape
     im = np.zeros((width, height), dtype=np.uint8)
@@ -19,7 +41,28 @@ def __find_pixel(map_filename, fn):
 
 
 def find_red_pixels(map_filename: str, upper_threshold: int = 100, lower_threshold: int = 50) -> npt.NDArray[np.float16]:
-    """Returns a binary image with the red pixels of the map."""
+    """
+    Returns a binary image with the red pixels of the map in the ``map_filename`` file.
+
+    Parameters
+    ----------
+    map_filename: str
+        The filename of the map image
+    upper_threshold: int
+        The upper threshold for the red value of a pixel
+    lower_threshold: int
+        The lower threshold for the green and blue values of a pixel
+
+    Returns
+    -------
+    np.ndarray
+        A binary image with the red pixels of the map.
+
+    See Also
+    --------
+    ``__find_pixel`` : Finds the pixels of the map that match the given function, used by this function.
+    ``find_cyan_pixels`` : Finds the cyan pixels of the map
+    """
 
     im = __find_pixel(map_filename, lambda r, g, b:
                       r > upper_threshold
@@ -30,8 +73,29 @@ def find_red_pixels(map_filename: str, upper_threshold: int = 100, lower_thresho
     return im
 
 
-def find_cyan_pixels(map_filename, upper_threshold=100, lower_threshold=50) -> npt.NDArray[np.float16]:
-    """Your documentation goes here"""
+def find_cyan_pixels(map_filename: str, upper_threshold: int = 100, lower_threshold: int = 50) -> npt.NDArray[np.float16]:
+    """
+    Returns a binary image with the cyan pixels of the map in the ``map_filename`` file.
+
+    Parameters
+    ----------
+    map_filename: str
+        The filename of the map image
+    upper_threshold: int
+        The upper threshold for the green and blue values of a pixel
+    lower_threshold: int
+        The lower threshold for the red value of a pixel
+
+    Returns
+    -------
+    np.ndarray
+        A binary image with the cyan pixels of the map.
+
+    See Also
+    --------
+    ``__find_pixel`` : Finds the pixels of the map that match the given function, used by this function.
+    ``find_red_pixels`` : Finds the red pixels of the map
+    """
 
     im = __find_pixel(map_filename, lambda r, g, b:
                       r < lower_threshold
