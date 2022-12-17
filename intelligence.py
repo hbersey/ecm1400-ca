@@ -1,6 +1,7 @@
 from skimage.io import imread, imsave
 import numpy.typing as npt
 import numpy as np
+from queue import Queue
 
 
 def __find_pixel(map_filename, fn):
@@ -41,9 +42,27 @@ def find_cyan_pixels(map_filename, upper_threshold=100, lower_threshold=50) -> n
     return im
 
 
-def detect_connected_components(*args, **kwargs):
+def detect_connected_components(IMG: npt.NDArray[np.uint]):
     """Your documentation goes here"""
-    # Your code goes here
+
+    MARK = np.zeros(IMG.shape, dtype=np.uint8)
+    Q = Queue()
+
+    for x, y in np.ndindex(IMG.shape):
+        if IMG[x, y] == 255 and MARK[x, y] == 0:
+            MARK[x, y] = 1
+            Q.put((x, y))
+            while not Q.empty():
+                m, n = Q.get()
+                for s in range(m - 1, m + 2):
+                    for t in range(n - 1, n + 2):
+                        if (s == m and t == n) or s < 0 or s >= IMG.shape[0] or t < 0 or t >= IMG.shape[1]:
+                            continue
+                        if IMG[s, t] == 255 and MARK[s, t] == 0:
+                            MARK[s, t] = 1
+                            Q.put((s, t))
+
+    return MARK
 
 
 def detect_connected_components_sorted(*args, **kwargs):
