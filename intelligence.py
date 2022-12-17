@@ -17,11 +17,6 @@ def __find_pixel(map_filename, fn):
     return im
 
 
-def __binary_image(im: npt.NDArray[np.uint8]) -> npt.NDArray[np.float16]:
-    """Converts an image to a binary image."""
-    return np.float16(1.0) * (im > 0)
-
-
 def find_red_pixels(map_filename: str, upper_threshold: int = 100, lower_threshold: int = 50) -> npt.NDArray[np.float16]:
     """Returns a binary image with the red pixels of the map."""
 
@@ -31,7 +26,7 @@ def find_red_pixels(map_filename: str, upper_threshold: int = 100, lower_thresho
                       and b < lower_threshold)
 
     imsave("map-red-pixels.jpg", im)
-    return __binary_image(im)
+    return im
 
 
 def find_cyan_pixels(map_filename, upper_threshold=100, lower_threshold=50) -> npt.NDArray[np.float16]:
@@ -43,7 +38,7 @@ def find_cyan_pixels(map_filename, upper_threshold=100, lower_threshold=50) -> n
                       and b > upper_threshold)
 
     imsave("map-cyan-pixels.jpg", im)
-    return __binary_image(im)
+    return im
 
 
 def detect_connected_components(*args, **kwargs):
