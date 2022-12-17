@@ -24,6 +24,10 @@ def __ap_dt(date: t.AnyStr, time: t.AnyStr) -> pd.Timestamp:
     -------
     pd.Timestamp
         A pandas Timestamp object with the ``date`` and ``time`` combined.
+
+    See Also
+    --------
+    ``__ap_float``: Converts a string to a float using this function.
     """
 
     # sort out time format
@@ -47,6 +51,11 @@ def __ap_float(s: t.AnyStr) -> t.Union[float, t.Literal(NO_DATA_TEXT)]:
     -------
     float or str
         ``s`` converted to a float, unless it's the ``NO_DATA_TEXT`` string.
+    
+    See Also
+    --------
+    ``NO_DATA_TEXT``: The string that is returned if ``s`` is the ``NO_DATA_TEXT`` string.
+    __read_csv: Converts the ``no``, ``pm10`` and ``pm25`` columns to floats, using this function.
     """
 
     if s == NO_DATA_TEXT:
@@ -72,6 +81,11 @@ def __read_csv(filename: str) -> pd.DataFrame:
     -------
     pd.DataFrame
         A pandas DataFrame with the ``date`` and ``time`` columns combined into a single ``dt`` column and the ``no``, ``pm10`` and ``pm25`` columns converted to floats.
+
+    See Also
+    --------
+    ``__ap_dt``: Converts a ``date`` and ``time`` string into a pandas Timestamp and sorts out the 24:00:00 issue, used by this function.
+    ``__ap_float``: Converts a string to a float, unless it's the ``NO_DATA_TEXT`` string, used by this function.
     """
     data_df = pd.read_csv(
         f"data/{filename}", converters={"no": __ap_float, "pm10": __ap_float, "pm25": __ap_float})
@@ -88,6 +102,10 @@ def load_data() -> TData:
     -------
     TData
         A dictionary of pandas DataFrames, with the keys being the station names and the values being the pandas DataFrames.
+
+    See Also
+    --------
+    ``__read_csv``: Reads a CSV file and returns a pandas DataFrame, used by this function.
     """
 
     hrl = __read_csv("Pollution-London Harlington.csv")
