@@ -489,3 +489,38 @@ def fill_missing_data(data: ap.TData, new_value: t.Any,  monitoring_station: ap.
     }
 
     return new_data
+
+def fill_missing_data_interface(monitoring_station: ap.TStation, pollutant: ap.TPollutant) -> None:
+    """
+    User interface for ``fill_missing_data``
+
+    Parameters
+    ----------
+    monitoring_station: ap.TStation
+        The monitoring station being used
+    pollutant: ap.TPollutant
+        The pollutant being calculated
+
+    Returns
+    -------
+    None
+
+    See Also
+    --------
+    ``fill_missing_data`` for the actual function
+    """
+
+    data = ap.get_data()
+
+    while True:
+        val_s = input("Enter a value to fill the missing data points with: ")
+        try:
+            val = float(val_s)
+            break
+        except ValueError:
+            print("Invalid value")
+
+    new_data = fill_missing_data(data, val, monitoring_station, pollutant)
+    ap.set_data(new_data)
+
+    print("Missing data points filled")

@@ -127,3 +127,8 @@ def get_data():
     if __data is None:
         __data = load_data()
     return __data
+
+
+def set_data(data: TData):
+    global __data
+    __data = data
