@@ -20,3 +20,4 @@ __MARK = np.array([
 def test_detect_connected_components():
     assert np.array_equal(mi.detect_connected_components(__IMG), __MARK)
 
+    # alot of this is covered in test_detect_connected_components_sorted
