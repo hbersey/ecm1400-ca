@@ -5,7 +5,7 @@ import utils
 import typing as t
 
 
-def __find_pixel(map_filename: str, fn: t.Callable[[int, int, int], bool]) -> npt.NDArray[np.float16]:
+def __find_pixel(map: npt.NDArray, fn: t.Callable[[int, int, int], bool]) -> npt.NDArray[np.float16]:
     """
     Returns a binary image with the pixels of the map that match the given function, ``fn``.
 
@@ -27,7 +27,6 @@ def __find_pixel(map_filename: str, fn: t.Callable[[int, int, int], bool]) -> np
     ``find_red_pixels`` : Finds the red pixels of the map, uses this function.
     ``find_cyan_pixels`` : Finds the cyan pixels of the map, uses this function.
     """
-    map: npt.NDArray = imread(map_filename)
     width, height, _ = map.shape
     im = np.zeros((width, height), dtype=np.uint8)
 
@@ -64,7 +63,8 @@ def find_red_pixels(map_filename: str, upper_threshold: int = 100, lower_thresho
     ``find_cyan_pixels`` : Finds the cyan pixels of the map
     """
 
-    im = __find_pixel(map_filename, lambda r, g, b:
+    map = imread(map_filename)
+    im = __find_pixel(map, lambda r, g, b:
                       r > upper_threshold
                       and g < lower_threshold
                       and b < lower_threshold)
@@ -128,7 +128,8 @@ def find_cyan_pixels(map_filename: str, upper_threshold: int = 100, lower_thresh
     ``find_red_pixels`` : Finds the red pixels of the map
     """
 
-    im = __find_pixel(map_filename, lambda r, g, b:
+    map = imread(map_filename)
+    im = __find_pixel(map, lambda r, g, b:
                       r < lower_threshold
                       and g > upper_threshold
                       and b > upper_threshold)
