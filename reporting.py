@@ -316,7 +316,7 @@ def monthly_average_interface(monitoring_station: ap.TStation, pollutant: ap.TPo
 # Maybe pd.timestamp isn't the best type for this
 
 
-def peak_hour_date(data: ap.TData, date: pd.Timestamp, monitoring_station: ap.TStation, pollutant: ap.TPollutant) -> int:
+def peak_hour_date(data: ap.TData, date: pd.Timestamp, monitoring_station: ap.TStation, pollutant: ap.TPollutant) -> t.Tuple[int, float]:
     """
     Returns the hour of the given date with the highest level of the given pollutant.
 
@@ -352,7 +352,7 @@ def peak_hour_date(data: ap.TData, date: pd.Timestamp, monitoring_station: ap.TS
             hr = row["dt"].hour
             max_ = val
 
-    return hr
+    return (hr, max_)
 
 
 def peak_hour_date_interface(monitoring_station: ap.TStation, pollutant: ap.TPollutant):
@@ -392,9 +392,9 @@ def peak_hour_date_interface(monitoring_station: ap.TStation, pollutant: ap.TPol
         except ValueError:
             print("Invalid date")
 
-    hr = peak_hour_date(data, dt, monitoring_station, pollutant)
+    hr, val = peak_hour_date(data, dt, monitoring_station, pollutant)
     # TODO print value too, when peak_hour_date is fixed
-    print(f"The highest {pollutant} level was at {hr:02d}:00")
+    print(f"The highest {pollutant} level, {val}, was at {hr:02d}:00")
 
 
 def count_missing_data(data: ap.TData,  monitoring_station: ap.TStation, pollutant: ap.TPollutant) -> int:
@@ -489,6 +489,7 @@ def fill_missing_data(data: ap.TData, new_value: t.Any,  monitoring_station: ap.
     }
 
     return new_data
+
 
 def fill_missing_data_interface(monitoring_station: ap.TStation, pollutant: ap.TPollutant) -> None:
     """
