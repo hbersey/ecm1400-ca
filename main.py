@@ -3,10 +3,11 @@ from dashboard.dashboard import Dashboard
 import reporting as pr
 import intelligence as mi
 from utils import menu
+import sys
 
 
-def main_menu():
-    """Your documentation goes here"""
+def main_menu() -> None:
+    """Displays the main menu and opens the menu for the selected module."""
 
     menu("Main Menu", [
         ("R", "Access the PR module", reporting_menu),
@@ -17,8 +18,8 @@ def main_menu():
     ])
 
 
-def reporting_menu():
-    """Your documentation goes here"""
+def reporting_menu() -> None:
+    """Takes input for a monitoring station and pollutant, then opens the reporting menu and runs the selected function. """
 
     ms = menu("Monitoring Station", [
         ("HRL", "Harlington"),
@@ -44,8 +45,8 @@ def reporting_menu():
     ])
 
 
-def monitoring_menu():
-    """Your documentation goes here"""
+def monitoring_menu() -> None:
+    """Allows the user to enter full screen mode and then opens the monitoring dashboard."""
     print("Monitoring Dashboard Opening Now.\nYou may want to enter full screen mode.")
     menu("Are you ready?", [
         ("Y", "Yes!"),
@@ -55,8 +56,8 @@ def monitoring_menu():
     d.run()
 
 
-def intelligence_menu():
-    """Your documentation goes here"""
+def intelligence_menu() -> None:
+    """Displays the intelligence menu and runs the selected function."""
 
     menu("Mobility Intelligence", [
         ("R", "Find Red Pixels", lambda: mi.find_red_pixels_interface()),
@@ -64,14 +65,14 @@ def intelligence_menu():
         ("D", "Detect Connected Components", lambda: mi.detect_connected_components_interface()), ])
 
 
-def about():
-    """Your documentation goes here"""
-    # Your code goes here
+def about() -> None:
+    """Displays the about text, including the module code, ECM1400 and my six-digit candidate number, 228258."""
+    print("ECM1400 Programming Continuous Assessment\nModule Code: ECM1400\nCandidate Number: 228258")
 
 
-def quit():
-    """Your documentation goes here"""
-    # Your code goes here
+def quit() -> None:
+    """Quits the program."""
+    sys.exit(0)
 
 
 if __name__ == '__main__':
