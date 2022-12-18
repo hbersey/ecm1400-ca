@@ -55,7 +55,7 @@ def reporting_menu():
     print()
     __menu("Polution Monitoring", [
         ("D", "Daily Average", lambda: pr.daily_average_interface(ms, p)),
-        ("E", "Daily Median"),
+        ("E", "Daily Median", lambda: pr.daily_median_interface(ms, p)),
         ("H", "Hourly Average"),
         ("M", "Monthly Average"),
         ("P", "Peak Hour Date"),
