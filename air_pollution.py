@@ -4,7 +4,7 @@ import typing as t
 
 NO_DATA_TEXT = "No data"  # Avoids magic string issues
 
-TStation = t.Literal["HRL", "MY1", "NK1"]
+TStation = t.Literal["HRL", "MY1", "KC1"]
 TPollutant = t.Literal["no", "pm10", "pm25"]
 TData = t.Dict[TStation, pd.DataFrame]
 
@@ -110,12 +110,12 @@ def load_data() -> TData:
 
     hrl = __read_csv("Pollution-London Harlington.csv")
     my1 = __read_csv("Pollution-London Marylebone Road.csv")
-    nk1 = __read_csv("Pollution-London N Kensington.csv")
+    kc1 = __read_csv("Pollution-London N Kensington.csv")
 
     return {
         "HRL": hrl,
         "MY1": my1,
-        "NK1": nk1
+        "KC1": kc1
     }
 
 
