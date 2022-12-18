@@ -38,7 +38,7 @@ def __ap_dt(date: t.AnyStr, time: t.AnyStr) -> pd.Timestamp:
     return pd.Timestamp(f"{date}T{time}")
 
 
-def __ap_float(s: t.AnyStr) -> t.Union[float, t.Literal(NO_DATA_TEXT)]:
+def __ap_float(s: t.AnyStr) -> t.Union[float, t.Literal[f"{NO_DATA_TEXT}"]]:
     """
     Converts a string to a float, unless it's the ``NO_DATA_TEXT`` string.
 
@@ -51,7 +51,7 @@ def __ap_float(s: t.AnyStr) -> t.Union[float, t.Literal(NO_DATA_TEXT)]:
     -------
     float or str
         ``s`` converted to a float, unless it's the ``NO_DATA_TEXT`` string.
-    
+
     See Also
     --------
     ``NO_DATA_TEXT``: The string that is returned if ``s`` is the ``NO_DATA_TEXT`` string.
