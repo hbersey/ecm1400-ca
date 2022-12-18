@@ -278,7 +278,44 @@ def monthly_average(data: ap.TData, monitoring_station: ap.TStation, pollutant: 
     return __mean(data, monitoring_station, pollutant, 12, lambda _, dt: dt.month - 1)
 
 
+def monthly_average_interface(monitoring_station: ap.TStation, pollutant: ap.TPollutant) -> None:
+    """
+    User interface for ``monthly_average``
+
+    Parameters
+    ----------
+    monitoring_station: ap.TStation
+        The monitoring station being used
+    pollutant: ap.TPollutant
+        The pollutant being calculated
+
+    Returns
+    -------
+    None
+
+    See Also
+    --------
+    ``monthly_average`` for the actual function
+    """
+
+    data = ap.load_data()
+    m0 = data[monitoring_station].iloc[0]["dt"].month
+
+    a = monthly_average(data, monitoring_station, pollutant)
+
+    print("\nMonthly Averages")
+    print("-----------------")
+
+    print("\nMonth     Value")
+
+    for i in range(12):
+        m = (m0 + i - 1) % 12 + 1
+        m_name = pd.Timestamp(2000, m, 1).strftime("%B").ljust(9)
+        print(f"{m_name} {a[i]:.{__PRESISION[pollutant]}f}")
+
 # Maybe pd.timestamp isn't the best type for this
+
+
 def peak_hour_date(data: ap.TData, date: pd.Timestamp, monitoring_station: ap.TStation, pollutant: ap.TPollutant) -> int:
     """
     Returns the hour of the given date with the highest level of the given pollutant.
