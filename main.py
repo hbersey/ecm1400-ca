@@ -46,6 +46,11 @@ def reporting_menu():
 
 def monitoring_menu():
     """Your documentation goes here"""
+    print("Monitoring Dashboard Opening Now.\nYou may want to enter full screen mode.")
+    menu("Are you ready?", [
+        ("Y", "Yes!"),
+    ])
+
     d = Dashboard()
     d.run()
 
