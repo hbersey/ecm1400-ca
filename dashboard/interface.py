@@ -1,14 +1,44 @@
 import os
 
-def clear_term():
+
+def clear_term() -> None:
+    """Clears the terminal screen."""
     cmd = "cls" if os.name == "nt" else "clear"
     os.system(cmd)
 
 
-def horizontal_rule(cols, char='-'):
+def horizontal_rule(cols, char='-') -> None:
+    """
+    Prints a horizontal rule of the given length.
+
+    Parameters
+    ----------
+    cols : int
+        The length of the horizontal rule.
+    char : str, optional
+        The character to use for the horizontal rule, by default '-'
+    """
     print(char * cols)
 
+
 def layout(lh, selected, is_rh):
+    """
+    Prints the layout of the dashboard.
+
+    Parameters
+    ----------
+    lh : list
+        The list of tuples containing the left-hand menu options.
+    selected : int
+        The index of the selected left-hand menu option.
+    is_rh : bool
+        Whether the right-hand menu is currently being interacted with.
+
+    See Also
+    --------
+    clear_term : Clears the terminal screen.
+    horizontal_rule : Prints a horizontal rule of the given length.
+    """
     lh_names = [o[0] for o in lh]
 
     (cols, lines) = os.get_terminal_size()
