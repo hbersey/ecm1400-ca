@@ -427,7 +427,36 @@ def count_missing_data(data: ap.TData,  monitoring_station: ap.TStation, polluta
     return n
 
 
+def count_missing_data_interface(monitoring_station: ap.TStation, pollutant: ap.TPollutant) -> None:
+    """
+    User interface for ``count_missing_data``
+
+    Parameters
+    ----------
+    monitoring_station: ap.TStation
+        The monitoring station being used
+    pollutant: ap.TPollutant
+        The pollutant being calculated
+
+    Returns
+    -------
+    None
+
+    See Also
+    --------
+    ``count_missing_data`` for the actual function
+    """
+
+    data = ap.load_data()
+
+    n = count_missing_data(data, monitoring_station, pollutant)
+
+    print(
+        f"There are {n} missing data points for pollutant {pollutant} at monitoring station {monitoring_station}")
+
 # Not sure what type is best of new_value
+
+
 def fill_missing_data(data: ap.TData, new_value: t.Any,  monitoring_station: ap.TStation, pollutant: ap.TPollutant) -> ap.TData:
     """
     Returns the data with the missing data points filled with the given value.
