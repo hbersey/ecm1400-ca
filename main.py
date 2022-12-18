@@ -86,4 +86,14 @@ def quit():
 
 
 if __name__ == '__main__':
-    main_menu()
+    cont = True
+    while cont:
+        sel = main_menu()
+        if sel == "Q":
+            break
+
+        sel = __menu("Do you want to continue?", [
+            ("Y", "Yes"),
+            ("N", "No")
+        ])
+        cont = sel == "Y"
