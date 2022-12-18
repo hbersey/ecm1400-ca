@@ -393,7 +393,6 @@ def peak_hour_date_interface(monitoring_station: ap.TStation, pollutant: ap.TPol
             print("Invalid date")
 
     hr, val = peak_hour_date(data, dt, monitoring_station, pollutant)
-    # TODO print value too, when peak_hour_date is fixed
     print(f"The highest {pollutant} level, {val}, was at {hr:02d}:00")
 
 
