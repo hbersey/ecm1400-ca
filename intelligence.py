@@ -172,7 +172,7 @@ def find_cyan_pixels_interface():
 def detect_connected_components(IMG: npt.NDArray[np.uint]):
     """Your documentation goes here"""
 
-    f = open("cc-output-2a.txt", "w")
+    f_2a = open("cc-output-2a.txt", "w")
 
     marked = np.zeros(IMG.shape, dtype=np.uint8)
     queue = utils.NDQueue(initial_size=32, dtype="2u2")
@@ -196,11 +196,12 @@ def detect_connected_components(IMG: npt.NDArray[np.uint]):
                         if IMG[n_s, n_t] == 255 and marked[n_s, n_t] == 0:
                             marked[n_s, n_t] = 1
                             queue.enqueue((n_s, n_t))
-            f.write(
+            f_2a.write(
                 f"Connected Component {component_n}, number of pixels = {pixels_n}\n")
 
-    f.write(f"Total number of connected components = {component_n}\n")
-    f.close()
+    f_2a.write(f"Total number of connected components = {component_n}\n")
+    f_2a.close()
+    
     return marked
 
 
@@ -211,10 +212,15 @@ def detect_connected_components(IMG: npt.NDArray[np.uint]):
 def detect_connected_components_sorted(MARK: npt.NDArray[np.uint8]):
     """Your documentation goes here"""
 
+    print("A")
+    print(MARK)
+
     marked = np.zeros(MARK.shape, dtype=np.uint8)
     queue = utils.NDQueue(initial_size=32, dtype="2u2")
 
     component_pixels = []
+
+    print(MARK.shape, np.ndindex(MARK.shape))
 
     component_n = 0
     for p_x, p_y in np.ndindex(MARK.shape):
@@ -238,14 +244,17 @@ def detect_connected_components_sorted(MARK: npt.NDArray[np.uint8]):
 
             component_pixels.append([component_n, pixels_n])
 
-    f = open("cc-output-2b.txt", "w")
+    f_2b = open("cc-output-2b.txt", "w")
+
+    print("B")
+    print(component_pixels)
 
     # I'm using quick sort because it's been reliable and fast.
     # Merge sort would have been as good but I needed more practice with quick sort.
 
-    print(component_pixels)
     component_pixels = np.array(component_pixels)
-    print("\n\n")
+    
+    print("B")
     print(component_pixels)
 
     def at(i):
@@ -255,9 +264,12 @@ def detect_connected_components_sorted(MARK: npt.NDArray[np.uint8]):
         component_pixels[[i, j]] = component_pixels[[j, i]]
 
     utils.quick_sort(at, swap, 0, len(component_pixels) - 1)
-    print("\n\n")
 
-    print(component_pixels)
+    for n, p in component_pixels:
+        f_2b.write(f"Connected Component {n}, number of pixels = {p}\n")
+
+    f_2b.write(f"Total number of connected components = {component_n}\n")
+    f_2b.close()
 
 
 def detect_connected_components_interface():
@@ -271,7 +283,7 @@ def detect_connected_components_interface():
         im = find_cyan_pixels_interface()
 
     print("\nDetecting Connected Components...")
-    im = detect_connected_components(im)
+    mark = detect_connected_components(im)
     print("\nConnected Components Detected. Saved as cc-output-2a.txt")
 
     sel = utils.menu("Sort Components?", [
@@ -282,5 +294,5 @@ def detect_connected_components_interface():
     if sel == "N":
         return
 
-    detect_connected_components_sorted(detect_connected_components(im))
+    detect_connected_components_sorted(mark)
     print("Connected Components Detected and Sorted. Saved as cc-output-2b.txt")
