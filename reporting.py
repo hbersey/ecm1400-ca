@@ -4,6 +4,11 @@ import numpy.typing as npt
 import typing as t
 import pandas as pd
 
+__PRESISION = {
+    "no": 5,
+    "pm10": 3,
+    "pm25": 3,
+}
 
 def __mean(data: ap.TData, monitoring_station: ap.TStation, pollutant: ap.TPollutant, N: int, get_i: t.Callable[[pd.Timestamp, pd.Timestamp], int]) -> float:
     """
@@ -69,6 +74,40 @@ def daily_average(data: ap.TData, monitoring_station: ap.TStation, pollutant: ap
     """
     return __mean(data, monitoring_station, pollutant, 365, lambda dt0, dt: (dt - dt0) // pd.Timedelta(1, 'D'))
 
+
+def daily_average_interface(monitoring_station: ap.TStation, pollutant: ap.TPollutant) -> None:
+    """
+    User interface for ``daily_average``
+
+    Parameters
+    ----------
+    monitoring_station: ap.TStation
+        The monitoring station being used
+    pollutant: ap.TPollutant
+        The pollutant being calculated
+
+    Returns
+    -------
+    None
+
+    See Also
+    --------
+    ``daily_average`` for the actual function
+    """
+
+    data = ap.load_data()
+    dt0 = data[monitoring_station].iloc[0]["dt"]
+
+    a = daily_average(data, monitoring_station, pollutant)
+
+    print("\nDaily Averages")
+    print("-----------------")
+
+    print("\nDate        Value")
+
+    for i in range(365):
+        dt = dt0 + pd.Timedelta(i, 'D')
+        print(f"{dt:%Y-%m-%d}: {a[i]:.{__PRESISION[pollutant]}f}")
 
 def daily_median(data: ap.TData, monitoring_station: ap.TStation, pollutant: ap.TPollutant):
     """
