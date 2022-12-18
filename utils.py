@@ -259,3 +259,25 @@ def quick_sort(at, swap, low, high):
     pivot_index = __quick_sort_partition(at, swap, low, high)
     quick_sort(at, swap, low, pivot_index - 1)
     quick_sort(at, swap, pivot_index + 1, high)
+
+
+def menu(title: str, items: t.List[t.Tuple[str, str, t.Optional[t.Callable]]]):
+    fns = {}
+
+    print(f"\n{title}")
+    print("-" * len(title), end="\n\n")
+
+    for (option, description, *fn) in items:
+        print(f"{option}) {description}")
+        fns[option] = fn[0] if len(fn) == 1 else lambda: None
+
+    print()
+
+    while True:
+        sel = input("Your selection: ").strip()
+        if sel in fns.keys():
+            fns[sel]()
+            break
+        print("\nInvalid selection. Please try again.")
+
+    return sel

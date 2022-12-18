@@ -2,34 +2,13 @@ import typing as t
 from dashboard.dashboard import Dashboard
 import reporting as pr
 import intelligence as mi
-
-
-def __menu(title: str, items: t.List[t.Tuple[str, str, t.Optional[t.Callable]]]):
-    fns = {}
-
-    print(f"\n{title}")
-    print("-" * len(title), end="\n\n")
-
-    for (option, description, *fn) in items:
-        print(f"{option}) {description}")
-        fns[option] = fn[0] if len(fn) == 1 else lambda: None
-
-    print()
-
-    while True:
-        sel = input("Your selection: ").strip()
-        if sel in fns.keys():
-            fns[sel]()
-            break
-        print("\nInvalid selection. Please try again.")
-
-    return sel
+from utils import menu
 
 
 def main_menu():
     """Your documentation goes here"""
 
-    __menu("Main Menu", [
+    menu("Main Menu", [
         ("R", "Access the PR module", reporting_menu),
         ("I", "Access the MI module", intelligence_menu),
         ("M", "Access the RM module", monitoring_menu),
@@ -41,20 +20,20 @@ def main_menu():
 def reporting_menu():
     """Your documentation goes here"""
 
-    ms = __menu("Monitoring Station", [
+    ms = menu("Monitoring Station", [
         ("HRL", "Harlington"),
         ("MY1", "Marylebone Road"),
         ("KC1", "North Kensington"),
     ])
 
-    p = __menu("Pollutant", [
+    p = menu("Pollutant", [
         ("NO", "Nitrogen Oxide"),
         ("PM10", "Particulate Matter 10"),
         ("PM25", "Particulate Matter 2.5"),
     ]).lower()
 
     print()
-    __menu("Polution Monitoring", [
+    menu("Polution Monitoring", [
         ("D", "Daily Average", lambda: pr.daily_average_interface(ms, p)),
         ("E", "Daily Median", lambda: pr.daily_median_interface(ms, p)),
         ("H", "Hourly Average", lambda: pr.hourly_average_interface(ms, p)),
@@ -74,11 +53,10 @@ def monitoring_menu():
 def intelligence_menu():
     """Your documentation goes here"""
 
-    __menu("Mobility Intelligence", [
+    menu("Mobility Intelligence", [
         ("R", "Find Red Pixels", lambda: mi.find_red_pixels_interface()),
         ("C", "Find Cyan Pixels", lambda: mi.find_cyan_pixels_interface()),
-        # ("D", "Detect Connected Components", lambda: mi.detect_connected_components(mi.find_cyan_pixels("data/map.jpg"))),
-    ])
+        ("D", "Detect Connected Components", lambda: mi.detect_connected_components_interface()), ])
 
 
 def about():
@@ -98,7 +76,7 @@ if __name__ == '__main__':
         if sel == "Q":
             break
 
-        sel = __menu("Do you want to continue?", [
+        sel = menu("Do you want to continue?", [
             ("Y", "Yes"),
             ("N", "No")
         ])

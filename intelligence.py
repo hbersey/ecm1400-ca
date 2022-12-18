@@ -1,7 +1,7 @@
 from skimage.io import imread, imsave
 import numpy.typing as npt
 import numpy as np
-from utils import NDQueue, quick_sort
+import utils
 import typing as t
 
 
@@ -98,8 +98,10 @@ def find_red_pixels_interface():
         except ValueError:
             print("\nInvalid threshold values, must be integers.")
 
-    find_red_pixels(map_filename, upper_threshold, lower_threshold)
+    im = find_red_pixels(map_filename, upper_threshold, lower_threshold)
     print("Red Pixels Found. Saved as map-red-pixels.jpg")
+
+    return im
 
 
 def find_cyan_pixels(map_filename: str, upper_threshold: int = 100, lower_threshold: int = 50) -> npt.NDArray[np.float16]:
@@ -144,7 +146,8 @@ def find_cyan_pixels_interface():
 
     while True:
         try:
-            upper_threshold_s = input("Upper threshold for green and blue pixels (100): ")
+            upper_threshold_s = input(
+                "Upper threshold for green and blue pixels (100): ")
             upper_threshold = 100 if upper_threshold_s == "" else int(
                 upper_threshold_s)
 
@@ -160,8 +163,10 @@ def find_cyan_pixels_interface():
         except ValueError:
             print("\nInvalid threshold values, must be integers.")
 
-    find_red_pixels(map_filename, upper_threshold, lower_threshold)
+    im = find_cyan_pixels(map_filename, upper_threshold, lower_threshold)
     print("Red Pixels Found. Saved as map-red-pixels.jpg")
+
+    return im
 
 
 def detect_connected_components(IMG: npt.NDArray[np.uint]):
@@ -170,7 +175,7 @@ def detect_connected_components(IMG: npt.NDArray[np.uint]):
     f = open("cc-output-2a.txt", "w")
 
     marked = np.zeros(IMG.shape, dtype=np.uint8)
-    queue = NDQueue(initial_size=32, dtype="2u2")
+    queue = utils.NDQueue(initial_size=32, dtype="2u2")
 
     component_n = 0
     for p_x, p_y in np.ndindex(IMG.shape):
@@ -207,7 +212,7 @@ def detect_connected_components_sorted(MARK: npt.NDArray[np.uint8]):
     """Your documentation goes here"""
 
     marked = np.zeros(MARK.shape, dtype=np.uint8)
-    queue = NDQueue(initial_size=32, dtype="2u2")
+    queue = utils.NDQueue(initial_size=32, dtype="2u2")
 
     component_pixels = []
 
@@ -249,7 +254,33 @@ def detect_connected_components_sorted(MARK: npt.NDArray[np.uint8]):
     def swap(i, j):
         component_pixels[[i, j]] = component_pixels[[j, i]]
 
-    quick_sort(at, swap, 0, len(component_pixels) - 1)
+    utils.quick_sort(at, swap, 0, len(component_pixels) - 1)
     print("\n\n")
 
     print(component_pixels)
+
+
+def detect_connected_components_interface():
+    sel = utils.menu("Red or Cyan Pixels", [
+        ("R", "Red Pixels"),
+        ("C", "Cyan Pixels")
+    ])
+    if sel == "R":
+        im = find_red_pixels_interface()
+    else:
+        im = find_cyan_pixels_interface()
+
+    print("\nDetecting Connected Components...")
+    im = detect_connected_components(im)
+    print("\nConnected Components Detected. Saved as cc-output-2a.txt")
+
+    sel = utils.menu("Sort Components?", [
+        ("Y", "Yes"),
+        ("N", "No")
+    ])
+
+    if sel == "N":
+        return
+
+    detect_connected_components_sorted(detect_connected_components(im))
+    print("Connected Components Detected and Sorted. Saved as cc-output-2b.txt")
