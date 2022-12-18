@@ -13,6 +13,15 @@ __DATA = {
 
 
 def test_peak_hour_date():
-    assert peak_hour_date(__DATA, pd.Timestamp("2020-01-01"), "TEST", "no") == 3
-    assert peak_hour_date(__DATA, pd.Timestamp("2020-01-01"), "TEST", "pm10") == 0
-    assert peak_hour_date(__DATA, pd.Timestamp("2020-01-01"), "TEST", "pm25") == 0
+    no = peak_hour_date(__DATA, pd.Timestamp("2020-01-01"), "TEST", "no")
+    pm10 = peak_hour_date(__DATA, pd.Timestamp("2020-01-01"), "TEST", "pm10")
+    pm25 = peak_hour_date(__DATA, pd.Timestamp("2020-01-01"), "TEST", "pm25")
+
+    assert no[0] == 3
+    assert no[1] == 5.0
+
+    assert pm10[0] == 0
+    assert pm10[1] == 2.0
+
+    assert pm25[0] == 0
+    assert pm25[1] == 3.0
