@@ -12,7 +12,7 @@ def __is_green(_r, g, _b):
     return g == 255
 
 
-def test_find_pixel():
+def test_find_pixels():
     assert np.array_equal(mi.__find_pixel(__IMG, __is_green), np.array([
         [255, 0, 0],
         [0, 255, 0],
