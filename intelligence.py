@@ -1,7 +1,7 @@
 from skimage.io import imread, imsave
 import numpy.typing as npt
 import numpy as np
-from utils import NDQueue
+from utils import NDQueue, quick_sort
 import typing as t
 
 
@@ -19,7 +19,7 @@ def __find_pixel(map_filename: str, fn: t.Callable[[int, int, int], bool]) -> np
     Returns
     -------
     np.ndarray
-        A binary image with the pixels of the map that match the given function. 
+        A binary image with the pixels of the map that match the given function.
         (255 for White, 0 for Black)
 
     See Also
@@ -141,6 +141,62 @@ def detect_connected_components(IMG: npt.NDArray[np.uint]):
     return marked
 
 
-def detect_connected_components_sorted(*args, **kwargs):
+# I think it would be better to return the equivalent of ``component_pixels`` instead of the marked image from detect_connected_components.
+# This way we wouldn't have to run essentially the same algorithm twice.
+# Or just combine both functions into one, if they were only ever used together.
+
+def detect_connected_components_sorted(MARK: npt.NDArray[np.uint8]):
     """Your documentation goes here"""
-    # Your code goes here
+
+    marked = np.zeros(MARK.shape, dtype=np.uint8)
+    queue = NDQueue(initial_size=32, dtype="2u2")
+
+    component_pixels = []
+
+    component_n = 0
+    for p_x, p_y in np.ndindex(MARK.shape):
+        if MARK[p_x, p_y] == 1 and marked[p_x, p_y] == 0:
+            marked[p_x, p_y] = 1
+            queue.enqueue((p_x, p_y))
+
+            pixels_n = 0
+            component_n += 1
+
+            while not queue.is_empty():
+                pixels_n += 1
+                q_m, q_n = queue.dequeue()
+                for n_s in range(q_m - 1, q_m + 2):
+                    for n_t in range(q_n - 1, q_n + 2):
+                        if (n_s == q_m and n_t == q_n) or n_s < 0 or n_s >= MARK.shape[0] or n_t < 0 or n_t >= MARK.shape[1]:
+                            continue
+                        if MARK[n_s, n_t] == 1 and marked[n_s, n_t] == 0:
+                            marked[n_s, n_t] = 1
+                            queue.enqueue((n_s, n_t))
+
+            component_pixels.append([component_n, pixels_n])
+
+    f = open("cc-output-2b.txt", "w")
+
+    # I'm using quick sort because it's been reliable and fast.
+    # Merge sort would have been as good but I needed more practice with quick sort.
+
+    print(component_pixels)
+    component_pixels = np.array(component_pixels)
+    print("\n\n")
+    print(component_pixels)
+
+    def at(i):
+        return component_pixels[i][1]
+
+    def swap(i, j):
+        component_pixels[[i, j]] = component_pixels[[j, i]]
+
+    quick_sort(at, swap, 0, len(component_pixels) - 1)
+    print("\n\n")
+
+    print(component_pixels)
+
+
+im = find_red_pixels("data/map.png")
+marked = detect_connected_components(im)
+detect_connected_components_sorted(marked)

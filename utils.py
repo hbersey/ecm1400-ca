@@ -237,3 +237,25 @@ class NDQueue:
 
     def is_empty(self):
         return self.__head == self.__tail
+
+
+def __quick_sort_partition(at, swap, low, high):
+    i = low - 1
+    pivot = at(high)
+
+    for j in range(low, high):
+        if at(j) <= pivot:
+            i += 1
+            swap(i, j)
+
+    swap(i + 1, high)
+    return i + 1
+
+
+def quick_sort(at, swap, low, high):
+    if low >= high:
+        return
+
+    pivot_index = __quick_sort_partition(at, swap, low, high)
+    quick_sort(at, swap, low, pivot_index - 1)
+    quick_sort(at, swap, pivot_index + 1, high)
