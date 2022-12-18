@@ -76,7 +76,7 @@ def intelligence_menu():
 
     __menu("Mobility Intelligence", [
         ("R", "Find Red Pixels", lambda: mi.find_red_pixels_interface()),
-        # ("C", "Find Cyan Pixels", lambda: mi.find_cyan_pixels("data/map.jpg")),
+        ("C", "Find Cyan Pixels", lambda: mi.find_cyan_pixels_interface()),
         # ("D", "Detect Connected Components", lambda: mi.detect_connected_components(mi.find_cyan_pixels("data/map.jpg"))),
     ])
 
