@@ -222,6 +222,41 @@ def hourly_average(data: ap.TData, monitoring_station: ap.TStation, pollutant: a
     return __mean(data, monitoring_station, pollutant, 24, lambda _, dt: dt.hour)
 
 
+def hourly_average_interface(monitoring_station: ap.TStation, pollutant: ap.TPollutant) -> None:
+    """
+    User interface for ``hourly_average``
+
+    Parameters
+    ----------
+    monitoring_station: ap.TStation
+        The monitoring station being used
+    pollutant: ap.TPollutant
+        The pollutant being calculated
+
+    Returns
+    -------
+    None
+
+    See Also
+    --------
+    ``hourly_average`` for the actual function
+    """
+
+    data = ap.load_data()
+    dt0 = data[monitoring_station].iloc[0]["dt"]
+
+    a = daily_average(data, monitoring_station, pollutant)
+
+    print("\nHourly Averages")
+    print("-----------------")
+
+    print("\nHour  Value")
+
+    for i in range(24):
+        dt = dt0 + pd.Timedelta(i, 'H')
+        print(f"{dt:%H}:00 {a[i]:.{__PRESISION[pollutant]}f}")
+
+
 def monthly_average(data: ap.TData, monitoring_station: ap.TStation, pollutant: ap.TPollutant) -> npt.NDArray[np.float64]:
     """
     Returns the monthly (mean) averages for a given monitoring station and pollutant.
