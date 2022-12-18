@@ -58,7 +58,7 @@ def reporting_menu():
         ("E", "Daily Median", lambda: pr.daily_median_interface(ms, p)),
         ("H", "Hourly Average", lambda: pr.hourly_average_interface(ms, p)),
         ("M", "Monthly Average", lambda: pr.monthly_average_interface(ms, p)),
-        ("P", "Peak Hour Date"),
+        ("P", "Peak Hour Date", lambda: pr.peak_hour_date_interface(ms, p)),
         ("C", "Count Missing Data"),
         ("F", "Fill Missing Data"),
     ])

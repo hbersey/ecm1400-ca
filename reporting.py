@@ -355,6 +355,48 @@ def peak_hour_date(data: ap.TData, date: pd.Timestamp, monitoring_station: ap.TS
     return hr
 
 
+def peak_hour_date_interface(monitoring_station: ap.TStation, pollutant: ap.TPollutant):
+    """
+    User interface for ``peak_hour_date``
+
+    Parameters
+    ----------
+    monitoring_station: ap.TStation
+        The monitoring station being used
+    pollutant: ap.TPollutant
+        The pollutant being calculated
+
+    Returns
+    -------
+    None
+
+    See Also
+    --------
+    ``peak_hour_date`` for the actual function
+    """
+
+    data = ap.load_data()
+
+    # Data is sorted by date so the first and last dates are the earliest and latest dates
+    dt_min = data[monitoring_station].iloc[0]["dt"]
+    dt_max = data[monitoring_station].iloc[-1]["dt"]
+
+    while True:
+        dt_s = input("Enter a date (YYYY-MM-DD): ")
+        try:
+            dt = pd.Timestamp(dt_s)
+            if dt >= dt_min and dt <= dt_max:
+                break
+            print(
+                f"Date must be between {dt_min:%Y-%m-%d} and {dt_max:%Y-%m-%d}")
+        except ValueError:
+            print("Invalid date")
+
+    hr = peak_hour_date(data, dt, monitoring_station, pollutant)
+    # TODO print value too, when peak_hour_date is fixed
+    print(f"The highest {pollutant} level was at {hr:02d}:00")
+
+
 def count_missing_data(data: ap.TData,  monitoring_station: ap.TStation, pollutant: ap.TPollutant) -> int:
     """
     Returns the number of missing data points for a given monitoring station and pollutant.
