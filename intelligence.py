@@ -73,6 +73,32 @@ def find_red_pixels(map_filename: str, upper_threshold: int = 100, lower_thresho
     return im
 
 
+def find_red_pixels_interface():
+    print("\nPress enter to use default values (data/map.png, 100, 50)\n")
+
+    map_filename = input("Map path (data/map.png): ")
+    if map_filename == "":
+        map_filename = "data/map.png"
+    
+    while True:
+        try:
+            upper_threshold_s = input("Upper threshold for red pixels (100): ")
+            upper_threshold = 100 if upper_threshold_s == "" else int(upper_threshold_s)
+            
+            lower_threshold_s = input("Lower threshold for green and blue pixels (50): ")
+            lower_threshold = 50 if lower_threshold_s == "" else int(lower_threshold_s)
+
+            if upper_threshold >= 0 or upper_threshold <= 255 or lower_threshold >= 0 or lower_threshold < 255:
+                break
+
+            print("\nInvalid threshold values, must be between 0 and 255 (inclusive).")
+        except ValueError:
+            print("\nInvalid threshold values, must be integers.")
+
+    find_red_pixels(map_filename, upper_threshold, lower_threshold)
+    print("Red Pixels Found. Saved as map-red-pixels.jpg")
+
+
 def find_cyan_pixels(map_filename: str, upper_threshold: int = 100, lower_threshold: int = 50) -> npt.NDArray[np.float16]:
     """
     Returns a binary image with the cyan pixels of the map in the ``map_filename`` file.
@@ -195,8 +221,3 @@ def detect_connected_components_sorted(MARK: npt.NDArray[np.uint8]):
     print("\n\n")
 
     print(component_pixels)
-
-
-im = find_red_pixels("data/map.png")
-marked = detect_connected_components(im)
-detect_connected_components_sorted(marked)

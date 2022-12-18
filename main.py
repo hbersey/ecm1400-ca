@@ -1,6 +1,7 @@
 import typing as t
 from dashboard.dashboard import Dashboard
 import reporting as pr
+import intelligence as mi
 
 
 def __menu(title: str, items: t.List[t.Tuple[str, str, t.Optional[t.Callable]]]):
@@ -30,8 +31,8 @@ def main_menu():
 
     __menu("Main Menu", [
         ("R", "Access the PR module", reporting_menu),
-        ("I", "Access the MI module", monitoring_menu),
-        ("M", "Access the RM module", intelligence_menu),
+        ("I", "Access the MI module", intelligence_menu),
+        ("M", "Access the RM module", monitoring_menu),
         ("A", "Print the About text", about),
         ("Q", "Quit the application", quit)
     ])
@@ -72,7 +73,12 @@ def monitoring_menu():
 
 def intelligence_menu():
     """Your documentation goes here"""
-    # Your code goes here
+
+    __menu("Mobility Intelligence", [
+        ("R", "Find Red Pixels", lambda: mi.find_red_pixels_interface()),
+        # ("C", "Find Cyan Pixels", lambda: mi.find_cyan_pixels("data/map.jpg")),
+        # ("D", "Detect Connected Components", lambda: mi.detect_connected_components(mi.find_cyan_pixels("data/map.jpg"))),
+    ])
 
 
 def about():
