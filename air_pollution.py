@@ -117,3 +117,13 @@ def load_data() -> TData:
         "MY1": my1,
         "NK1": nk1
     }
+
+
+__data = None
+
+
+def get_data():
+    global __data
+    if __data is None:
+        __data = load_data()
+    return __data

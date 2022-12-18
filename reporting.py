@@ -96,7 +96,7 @@ def daily_average_interface(monitoring_station: ap.TStation, pollutant: ap.TPoll
     ``daily_average`` for the actual function
     """
 
-    data = ap.load_data()
+    data = ap.get_data()
     dt0 = data[monitoring_station].iloc[0]["dt"]
 
     a = daily_average(data, monitoring_station, pollutant)
@@ -186,7 +186,7 @@ def daily_median_interface(monitoring_station: ap.TStation, pollutant: ap.TPollu
     ``daily_median`` for the actual function
     """
 
-    data = ap.load_data()
+    data = ap.get_data()
     dt0 = data[monitoring_station].iloc[0]["dt"]
 
     a = daily_median(data, monitoring_station, pollutant)
@@ -242,7 +242,7 @@ def hourly_average_interface(monitoring_station: ap.TStation, pollutant: ap.TPol
     ``hourly_average`` for the actual function
     """
 
-    data = ap.load_data()
+    data = ap.get_data()
     dt0 = data[monitoring_station].iloc[0]["dt"]
 
     a = daily_average(data, monitoring_station, pollutant)
@@ -298,7 +298,7 @@ def monthly_average_interface(monitoring_station: ap.TStation, pollutant: ap.TPo
     ``monthly_average`` for the actual function
     """
 
-    data = ap.load_data()
+    data = ap.get_data()
     m0 = data[monitoring_station].iloc[0]["dt"].month
 
     a = monthly_average(data, monitoring_station, pollutant)
@@ -375,7 +375,7 @@ def peak_hour_date_interface(monitoring_station: ap.TStation, pollutant: ap.TPol
     ``peak_hour_date`` for the actual function
     """
 
-    data = ap.load_data()
+    data = ap.get_data()
 
     # Data is sorted by date so the first and last dates are the earliest and latest dates
     dt_min = data[monitoring_station].iloc[0]["dt"]
@@ -447,7 +447,7 @@ def count_missing_data_interface(monitoring_station: ap.TStation, pollutant: ap.
     ``count_missing_data`` for the actual function
     """
 
-    data = ap.load_data()
+    data = ap.get_data()
 
     n = count_missing_data(data, monitoring_station, pollutant)
 
