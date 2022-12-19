@@ -1,8 +1,12 @@
 import dashboard.interface as if_
-from dashboard.panels import *
 from utils import getch
 import sys
 import dashboard.keys as keys
+
+from dashboard.panels._panel import DashboardPanel
+from dashboard.panels.home import HomePanel
+from dashboard.panels.options import OptionsPanel
+from dashboard.panels.exit import ExitPanel
 
 LH = [
     ["Home", HomePanel],
