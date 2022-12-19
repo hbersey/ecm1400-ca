@@ -9,7 +9,7 @@ TPollutant = t.Literal["no", "pm10", "pm25"]
 TData = t.Dict[TStation, pd.DataFrame]
 
 
-def __ap_dt(date: t.AnyStr, time: t.AnyStr) -> pd.Timestamp:
+def __ap_dt(date: str, time: str) -> pd.Timestamp:
     """
     Converts a ``date`` and ``time`` string into a pandas Timestamp and sorts out the 24:00:00 issue.
 
@@ -38,7 +38,8 @@ def __ap_dt(date: t.AnyStr, time: t.AnyStr) -> pd.Timestamp:
     return pd.Timestamp(f"{date}T{time}")
 
 
-def __ap_float(s: t.AnyStr) -> t.Union[float, t.Literal[f"{NO_DATA_TEXT}"]]:
+# Use not actually allowed to use variables inside t.Literal, but I came up with this to avoid magic strings:
+def __ap_float(s: str) -> t.Union[float, t.Literal[f"{NO_DATA_TEXT}"]]:
     """
     Converts a string to a float, unless it's the ``NO_DATA_TEXT`` string.
 
@@ -122,13 +123,29 @@ def load_data() -> TData:
 __data = None
 
 
-def get_data():
+def get_data() -> TData:
+    """
+    Returns the air pollution data from the CSV files, without having to load the data every time.
+
+    Returns
+    -------
+    TData
+        The air pollution data.
+    """
     global __data
     if __data is None:
         __data = load_data()
     return __data
 
 
-def set_data(data: TData):
+def set_data(data: TData) -> None:
+    """
+    Sets the air pollution data.
+    
+    Parameters
+    ----------
+    data: TData
+        The new air pollution data.
+    """
     global __data
     __data = data
