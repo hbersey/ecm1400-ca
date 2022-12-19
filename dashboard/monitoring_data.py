@@ -2,7 +2,7 @@ from dashboard.sites import SiteGroup, Site
 from dashboard.species import Species
 import typing as t
 from simplejson.errors import JSONDecodeError
-
+import pandas as pd
 
 class MonitoringData:
     _instance = None
@@ -10,6 +10,12 @@ class MonitoringData:
     _sites: t.Dict[str, t.List[Site]] = None  # one list per group
     _all_species: t.List[Species] = None
     _species: t.Dict[str, t.List[Species]] = None  # one list per site
+
+    selected_group = 0
+    selected_site = 0
+    selected_species = 0
+    start_date = pd.Timestamp.now() - pd.Timedelta(days=1)
+    end_date = pd.Timestamp.now() - pd.Timedelta(days=1)
 
     @property
     def groups(self) -> t.Dict[str, SiteGroup]:

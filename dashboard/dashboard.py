@@ -6,11 +6,13 @@ import dashboard.keys as keys
 from dashboard.panels._panel import DashboardPanel
 from dashboard.panels.home import HomePanel
 from dashboard.panels.options import OptionsPanel
+from dashboard.panels.display import DisplayPanel
 from dashboard.panels.exit import ExitPanel
 
 LH = [
     ["Home", HomePanel],
     ["Options", OptionsPanel],
+    ["Display", DisplayPanel],
     ["Exit", ExitPanel],
 ]
 

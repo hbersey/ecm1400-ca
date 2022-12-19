@@ -19,43 +19,58 @@ class OptionsPanel(DashboardPanel):
         items = [k for k in data.groups]
 
         if self.group_select is None:
-            self.group_select = LRSelect(items)
+            def get_selected():
+                return data.selected_group
+
+            def set_selected(val):
+                data.selected_group = val
+
+            self.group_select = LRSelect(items, get_selected, set_selected)
             return
 
-        self.group_select.selected = min(
-            self.group_select.selected, len(items) - 1)
+        data.selected_group = min(data.selected_group, len(items) - 1)
         self.group_select.items = items
 
     def __update_site_select(self):
         data = MonitoringData.instance()
         items = [s.name for s in data.sites(
-            data.group_name(self.group_select.selected))]
+            data.group_name(data.selected_group))]
 
         if self.site_select is None:
-            self.site_select = LRSelect(items)
+            def get_selected():
+                return data.selected_site
+
+            def set_selected(val):
+                data.selected_site = val
+
+            self.site_select = LRSelect(items, get_selected, set_selected)
             return
 
-        self.site_select.selected = min(
-            self.site_select.selected, len(items) - 1)
+        data.selected_site = min(data.selected_site, len(items) - 1)
         self.site_select.items = items
 
     def __update_species_select(self):
         data = MonitoringData.instance()
 
-        group_name = data.group_name(self.group_select.selected)
+        group_name = data.group_name(data.selected_group)
         sites = data.sites(group_name)
         if len(sites) == 0:
             self.__update_group_select()
             return
-        species = data.species(sites[self.site_select.selected])
+        species = data.species(sites[data.selected_site])
         items = [s.name for s in species]
 
         if self.species_select is None:
-            self.species_select = LRSelect(items)
+            def get_selected():
+                return data.selected_species
+
+            def set_selected(val):
+                data.selected_species = val
+
+            self.species_select = LRSelect(items, get_selected, set_selected)
             return
 
-        self.species_select.selected = min(
-            self.species_select.selected, len(items) - 1)
+        data.selected_species = min(data.selected_species, len(items) - 1)
         self.species_select.items = items
 
     def __init__(self) -> None:
@@ -71,7 +86,7 @@ class OptionsPanel(DashboardPanel):
         self.__update_species_select()
 
         self.start_date = DateInput(pd.Timestamp.now() - pd.Timedelta(days=1))
-        
+
         self.end_date = DateInput()
 
     def _print(self, cols, lines, rh_size, rh_offset):
