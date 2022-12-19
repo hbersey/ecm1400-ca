@@ -5,7 +5,7 @@ import utils
 import typing as t
 
 
-def __find_pixel(map: npt.NDArray, fn: t.Callable[[int, int, int], bool]) -> npt.NDArray[np.float16]:
+def __find_pixel(map: npt.NDArray, fn: t.Callable[[int, int, int], bool]) -> npt.NDArray[np.uint8]:
     """
     Returns a binary image with the pixels of the map that match the given function, ``fn``.
 
@@ -73,7 +73,14 @@ def find_red_pixels(map_filename: str, upper_threshold: int = 100, lower_thresho
     return im
 
 
-def find_red_pixels_interface():
+def find_red_pixels_interface() -> None:
+    """
+    Interface for the ``find_red_pixels`` function.
+
+    See Also
+    --------
+    ``find_red_pixels`` : Finds the red pixels of the map
+    """
     print("\nPress enter to use default values (data/map.png, 100, 50)\n")
 
     map_filename = input("Map path (data/map.png): ")
@@ -138,7 +145,14 @@ def find_cyan_pixels(map_filename: str, upper_threshold: int = 100, lower_thresh
     return im
 
 
-def find_cyan_pixels_interface():
+def find_cyan_pixels_interface() -> None:
+    """
+    Interface for the ``find_cyan_pixels`` function.
+
+    See Also
+    --------
+    ``find_cyan_pixels`` : Finds the cyan pixels of the map
+    """
     print("\nPress enter to use default values (data/map.png, 100, 50)\n")
 
     map_filename = input("Map path (data/map.png): ")
@@ -170,8 +184,27 @@ def find_cyan_pixels_interface():
     return im
 
 
-def detect_connected_components(IMG: npt.NDArray[np.uint]):
-    """Your documentation goes here"""
+def detect_connected_components(IMG: npt.NDArray[np.uint]) -> npt.NDArray[np.uint8]:
+    """
+    Detects the connected components of the given image, ``IMG``.
+    Saves data about the connected components to the file ``cc-output-2a.txt``.
+
+    Parameters
+    ----------
+    IMG: np.ndarray
+        The image to detect the connected components of.
+
+    Returns
+    -------
+    np.ndarray
+        The image with the connected components marked with different colors.
+
+    See Also
+    --------
+    ``utils.NDQueue`` : The queue used to implement the algorithm. (Uses np.ndarray as the underlying data structure.)
+    ``find_red_pixels`` : Finds the red pixels of the map, returns a binary image (``IMG``).
+    ``find_cyan_pixels`` : Finds the cyan pixels of the map, returns a binary image (``IMG``).
+    """
 
     f_2a = open("cc-output-2a.txt", "w")
 
@@ -202,7 +235,7 @@ def detect_connected_components(IMG: npt.NDArray[np.uint]):
 
     f_2a.write(f"Total number of connected components = {component_n}\n")
     f_2a.close()
-    
+
     return marked
 
 
@@ -210,8 +243,20 @@ def detect_connected_components(IMG: npt.NDArray[np.uint]):
 # This way we wouldn't have to run essentially the same algorithm twice.
 # Or just combine both functions into one, if they were only ever used together.
 
-def detect_connected_components_sorted(MARK: npt.NDArray[np.uint8]):
-    """Your documentation goes here"""
+def detect_connected_components_sorted(MARK: npt.NDArray[np.uint8]) -> None:
+    """
+    Sorts the connected components of the given marked array, ``MARK``, by size.
+
+    Parameters
+    ----------
+    MARK: np.ndarray
+        The marked array to sort the connected components of.
+
+    See Also
+    --------
+    ``utils.quick_sort`` : The sorting algorithm used to sort the connected components.
+    ``detect_connected_components`` : Detects the connected components of the given image, ``IMG``, returns a marked image (``MARK``).
+    """
 
     print("A")
     print(MARK)
@@ -254,7 +299,7 @@ def detect_connected_components_sorted(MARK: npt.NDArray[np.uint8]):
     # Merge sort would have been as good but I needed more practice with quick sort.
 
     component_pixels = np.array(component_pixels)
-    
+
     print("B")
     print(component_pixels)
 
@@ -273,9 +318,13 @@ def detect_connected_components_sorted(MARK: npt.NDArray[np.uint8]):
     f_2b.close()
 
 
-def detect_connected_components_interface():
+def detect_connected_components_interface() -> None:
+    """
+    Interface for the ``detect_connected_components`` and ``detect_connected_components_sorted`` functions.
+    """
+
     sel = utils.menu("Red or Cyan Pixels", [
-        ("R", "Red Pixels"),
+        ("R", "Red Pixels")
         ("C", "Cyan Pixels")
     ])
     if sel == "R":
