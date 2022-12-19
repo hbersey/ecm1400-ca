@@ -56,22 +56,28 @@ class Site:
     data_owner: str
     data_manager: str
     link: str
-    # species: t.List[Species]
+    specie_codes: t.List[str]
 
     @staticmethod
     def get_sites(group_name: str) -> t.List["Site"]:
         res = requests.get(
             f"https://api.erg.ic.ac.uk/AirQuality/Information/MonitoringSiteSpecies/GroupName={group_name}/Json")
+
         json = res.json()
 
         # Todo check for errors
 
         sites: t.List[Site] = []
 
-        for el in json["Sites"]["Site"]:
-            # specie_codes = [x["@SpeciesCode"] for x in el["Species"]]
-            # all_species = Species.get_species()
-            # filtered_species = list(filter(lambda x: x.code in specie_codes, all_species))
+        json_sites = json["Sites"]["Site"]
+        if type(json_sites) != list:
+            json_sites = [json_sites]
+
+        for el in json_sites:
+            if type(el["Species"]) == dict:
+                specie_codes = [el["Species"]["@SpeciesCode"]]
+            else:
+                specie_codes = [s["@SpeciesCode"] for s in el["Species"]]
 
             sites.append(Site(
                 local_authority_code=parse_or_none(
@@ -96,6 +102,6 @@ class Site:
 
                 link=or_none(el["@SiteLink"]),
 
-                # species=all_species,
+                specie_codes=specie_codes
             ))
         return sites

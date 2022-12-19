@@ -33,3 +33,5 @@ class Species:
 
         for el in json["AirQualitySpecies"]["Species"]:
             species.append(Species.parse(el))
+
+        return species
