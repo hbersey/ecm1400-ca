@@ -1,5 +1,5 @@
 from dashboard.panels._panel import DashboardPanel
-from dashboard.panels._components import LRSelect
+from dashboard.panels._components import *
 import dashboard.keys as keys
 from dashboard.species import Species
 from dashboard.monitoring_data import MonitoringData
@@ -10,7 +10,9 @@ class OptionsPanel(DashboardPanel):
     __GROUP_SECTION = 0
     __SITE_SECTION = 1
     __SPECIES_SECTION = 2
-    __N_SECTIONS = 3
+    __START_DATE_SECTION = 3
+    __END_DATE_SECTION = 4
+    __N_SECTIONS = 5
 
     def __update_group_select(self):
         data = MonitoringData.instance()
@@ -68,6 +70,10 @@ class OptionsPanel(DashboardPanel):
         self.species_select = None
         self.__update_species_select()
 
+        self.start_date = DateInput(pd.Timestamp.now() - pd.Timedelta(days=1))
+        
+        self.end_date = DateInput()
+
     def _print(self, cols, lines, rh_size, rh_offset):
 
         n_cursor_up = lines - 1
@@ -92,9 +98,14 @@ class OptionsPanel(DashboardPanel):
             f"\n\033[{rh_offset}C{species_title_style}Select Species:\033[0m")
         self.species_select.print(rh_offset, rh_size)
 
-        print(f"\n\033[{rh_offset}CSelect Start Date:")
+        start_date_style = "\033[1;4m" if self.current_section == self.__START_DATE_SECTION else ""
+        print(
+            f"\n\033[{rh_offset}C{start_date_style}Select Start Date:\033[0m")
+        self.start_date.print(rh_offset)
 
-        print(f"\n\033[{rh_offset}CSelect End Date:")
+        end_date_style = "\033[1;4m" if self.current_section == self.__END_DATE_SECTION else ""
+        print(f"\n\033[{rh_offset}C{end_date_style}Select End Date:\033[0m")
+        self.end_date.print(rh_offset)
 
     def handle_input(self, c):
         if c == keys.W and self.current_section > 0:
@@ -113,3 +124,7 @@ class OptionsPanel(DashboardPanel):
             self.__update_species_select()
         elif self.current_section == self.__SPECIES_SECTION:
             self.species_select.handle_input(c)
+        elif self.current_section == self.__START_DATE_SECTION:
+            self.start_date.handle_input(c)
+        elif self.current_section == self.__END_DATE_SECTION:
+            self.end_date.handle_input(c)
