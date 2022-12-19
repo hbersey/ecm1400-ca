@@ -56,12 +56,12 @@ class Site:
     data_owner: str
     data_manager: str
     link: str
-    species: t.List[Species]
+    # species: t.List[Species]
 
     @staticmethod
-    def get_site(group_name: str) -> t.List["Site"]:
+    def get_sites(group_name: str) -> t.List["Site"]:
         res = requests.get(
-            f"http://api.erg.ic.ac.uk/AirQuality/Information/MonitoringSiteSpecies/GroupName={group_name}/Json")
+            f"https://api.erg.ic.ac.uk/AirQuality/Information/MonitoringSiteSpecies/GroupName={group_name}/Json")
         json = res.json()
 
         # Todo check for errors
@@ -70,17 +70,19 @@ class Site:
 
         for el in json["Sites"]["Site"]:
             # specie_codes = [x["@SpeciesCode"] for x in el["Species"]]
-            all_species = Species.get_species()
+            # all_species = Species.get_species()
             # filtered_species = list(filter(lambda x: x.code in specie_codes, all_species))
 
             sites.append(Site(
-                local_authority_code=parse_or_none(int, el["@LocalAuthorityCode"]), 
-                local_authority_name=parse_or_none(str, el["@LocalAuthorityName"]),
-                
+                local_authority_code=parse_or_none(
+                    int, el["@LocalAuthorityCode"]),
+                local_authority_name=parse_or_none(
+                    str, el["@LocalAuthorityName"]),
+
                 code=or_none(el["@SiteCode"]),
                 name=or_none(el["@SiteName"]),
                 type_=or_none(el["@SiteType"]),
-                
+
                 date_closed=parse_or_none(parse_date, el["@DateClosed"]),
                 date_opened=parse_or_none(parse_date, el["@DateOpened"]),
 
@@ -88,12 +90,12 @@ class Site:
                 longitude=parse_or_none(float, el["@Longitude"]),
                 latitude_wgs84=parse_or_none(float, el["@LatitudeWGS84"]),
                 longitude_wgs84=parse_or_none(float, el["@LongitudeWGS84"]),
-                
+
                 data_owner=or_none(el["@DataOwner"]),
                 data_manager=or_none(el["@DataManager"]),
 
                 link=or_none(el["@SiteLink"]),
 
-                species=all_species,
+                # species=all_species,
             ))
         return sites

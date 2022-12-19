@@ -5,6 +5,7 @@ import dashboard.keys as keys
 from dashboard.interface import clear_term
 from dashboard.species import Species
 from dashboard.sites import Site, SiteGroup
+from dashboard.monitoring_data import MonitoringData
 
 
 class DashboardPanel(ABC):
@@ -106,30 +107,46 @@ class OptionsPanel(DashboardPanel):
     __SITE_SECTION = 1
     __N_GROUPS = 2
 
+    def __update_site_select(self):
+        data = MonitoringData.instance()
+        items = [s.name for s in data.sites(self.group_select.selected)]
+
+        if self.site_select is None:
+            self.site_select = LRSelect(items)
+            return
+
+        self.site_select.selected = min(self.site_select.selected, len(items) - 1)
+        self.site_select.items = items
+        
+
     def __init__(self) -> None:
         self.current_section = 0
 
-        self.groups = SiteGroup.get_all()
-        self.group_select = LRSelect([group.name if len(
-            group.description) > 16 else group.description for group in self.groups])
-        self.selected_group = 0
+        data = MonitoringData.instance()
 
-        # self.sites = Site.get_site("All")
-        self.sites = [Site(None, None, None, "Hello, World!", None,
-                           None, None, None, None, None, None, None, None, None, None)]
-        self.site_select = LRSelect([site.name for site in self.sites])
+        self.group_select = LRSelect(
+            [group.name if len(group.description) >
+             16 else group.description for group in data.groups]
+        )
+
+        self.site_select = None
+        self.__update_site_select()
 
         self.species = Species.get_species()
         self.selected_specie = 0
 
     def _print(self, cols, lines, rh_size, rh_offset):
+
         n_cursor_up = lines - 1
         print(f"\033[{n_cursor_up}A")
 
-        print(f"\033[{rh_offset}CSelect Site Group:")
+        group_title_style = "\033[1;4m" if self.current_section == self.__GROUP_SECTION else ""
+        print(f"\033[{rh_offset}C{group_title_style}Select Site Group:\033[0m")
         self.group_select.print(rh_offset, rh_size)
 
-        print(f"\n\033[{rh_offset}CSelect Site:")
+        site_title_style = "\033[1;4m" if self.current_section == self.__SITE_SECTION else ""
+        print(f"\n\033[{rh_offset}C{site_title_style}Select Site:\033[0m")
+        self.site_select.print(rh_offset, rh_size)
 
         # Select Species
         print(f"\n\033[{rh_offset}CSelect Species:")
@@ -147,11 +164,12 @@ class OptionsPanel(DashboardPanel):
         if c == keys.W and self.current_section > 0:
             self.current_section -= 1
             return
-        elif c == keys.D and self.current_section < (self.__N_GROUPS - 1):
+        elif c == keys.S and self.current_section < (self.__N_GROUPS - 1):
             self.current_section += 1
             return
 
         if self.current_section == self.__GROUP_SECTION:
             self.group_select.handle_input(c)
+            self.__update_site_select()
         elif self.current_section == self.__SITE_SECTION:
             self.site_select.handle_input(c)
