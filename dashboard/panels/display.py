@@ -57,7 +57,7 @@ class DisplayPanel(DashboardPanel):
 
         scale = self.max_v / (lines - 1)
         max_unit = int(self.max_v / scale)
-        
+
         print(f"\033[{(lines - 1)}A")
         s = [f"\033[{rh_offset}C" for _ in range(max_unit)]
 
