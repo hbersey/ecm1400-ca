@@ -3,8 +3,7 @@ from dashboard.monitoring_data import MonitoringData
 import requests
 from dataclasses import dataclass
 import pandas as pd
-from dashboard.panels._components import HScroll
-import numpy as np
+import dashboard.keys as keys
 
 
 @dataclass
@@ -16,6 +15,7 @@ class DPDataItem:
 class DisplayPanel(DashboardPanel):
     def __init__(self) -> None:
 
+        self.x_pos = 0
         md = MonitoringData.instance()
 
         # site_code = md.site.code
@@ -78,9 +78,11 @@ class DisplayPanel(DashboardPanel):
                 s[i] = f"{s[i]}{space}"
 
         # Plot Graph
-        for i, item in enumerate(self.data):
+        for i in range(len(self.data)):
             if i > (graph_width):
                 break
+
+            item = self.data[i + self.x_pos]
 
             u = int(item.value / scale)
             for y in range(graph_height):
@@ -94,21 +96,28 @@ class DisplayPanel(DashboardPanel):
             print(l)
 
         # Print x axis
-        x_axis_l0 = f"\033[{(rh_offset + y_axis_width)}C"
-        x_axis_l1 = f"\033[{(rh_offset + y_axis_width)}C"
-        x_axis_l2 = f"\033[{(rh_offset + y_axis_width)}C"
+        x_axis_lines = ["" for _ in range(3)]
 
-        for i in range(graph_width):
+        for i in range(len(self.data)):
             if i % 10 == 0:
-                x_axis_l0 = f"{x_axis_l0}\\"
-                d = self.data[i].ft
-                l1 = d.strftime("%d-%m").ljust(9) 
-                l2 = d.strftime("%H:%M").ljust(9)
-                x_axis_l1 = f"{x_axis_l1} {l1}"
-                x_axis_l2= f"{x_axis_l2} {l2}"
-            else:
-                x_axis_l0 = f"{x_axis_l0} "
+                x_axis_lines[0] = f"{x_axis_lines[0]}\\"
 
-        print(x_axis_l0)
-        print(x_axis_l1)
-        print(x_axis_l2)
+                d = self.data[i].ft
+
+                l2 = d.strftime("%H:%M")
+                l1 = d.strftime("%d-%m")
+
+                x_axis_lines[1] = f"{x_axis_lines[1]}{l1}     "
+                x_axis_lines[2] = f"{x_axis_lines[2]}{l2}     "
+            else:
+                x_axis_lines[0] = f"{x_axis_lines[0]} "
+
+        for i in range(3):
+            print(
+                f"\033[{(rh_offset + y_axis_width)}C{x_axis_lines[i][self.x_pos : self.x_pos + graph_width]}")
+
+    def handle_input(self, c):
+        if c == keys.A and self.x_pos > 0:
+            self.x_pos -= 1
+        elif c == keys.D and self.x_pos < len(self.data):
+            self.x_pos += 1
