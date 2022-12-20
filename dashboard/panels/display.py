@@ -58,9 +58,10 @@ class DisplayPanel(DashboardPanel):
         width = rh_size - 2
 
         y_axis_width = 5
+        x_axis_height = 3
 
-        graph_width = width  - y_axis_width
-        graph_height = height
+        graph_width = width - y_axis_width
+        graph_height = height - x_axis_height
 
         scale = self.max_v / graph_height
 
@@ -76,6 +77,7 @@ class DisplayPanel(DashboardPanel):
                 space = " " * y_axis_width
                 s[i] = f"{s[i]}{space}"
 
+        # Plot Graph
         for i, item in enumerate(self.data):
             if i > (graph_width):
                 break
@@ -87,5 +89,26 @@ class DisplayPanel(DashboardPanel):
                 else:
                     s[y] = f"{s[y]} "
 
+        # Print Graph
         for l in reversed(s):
             print(l)
+
+        # Print x axis
+        x_axis_l0 = f"\033[{(rh_offset + y_axis_width)}C"
+        x_axis_l1 = f"\033[{(rh_offset + y_axis_width)}C"
+        x_axis_l2 = f"\033[{(rh_offset + y_axis_width)}C"
+
+        for i in range(graph_width):
+            if i % 10 == 0:
+                x_axis_l0 = f"{x_axis_l0}\\"
+                d = self.data[i].ft
+                l1 = d.strftime("%d-%m").ljust(9) 
+                l2 = d.strftime("%H:%M").ljust(9)
+                x_axis_l1 = f"{x_axis_l1} {l1}"
+                x_axis_l2= f"{x_axis_l2} {l2}"
+            else:
+                x_axis_l0 = f"{x_axis_l0} "
+
+        print(x_axis_l0)
+        print(x_axis_l1)
+        print(x_axis_l2)
