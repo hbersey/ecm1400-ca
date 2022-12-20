@@ -55,18 +55,21 @@ class DisplayPanel(DashboardPanel):
             print("No values")
             return
 
-        scale = self.max_v / (lines - 1)
+        height = lines - 5
+        width = rh_size - 2
+
+        scale = self.max_v / height
         max_unit = int(self.max_v / scale)
 
-        print(f"\033[{(lines - 1)}A")
-        s = [f"\033[{rh_offset}C" for _ in range(max_unit)]
+        print(f"\033[{(lines - 2)}A")
+        s = [f"\033[{rh_offset}C" for _ in range(height)]
 
         for i, item in enumerate(self.data):
-            if i > (rh_size):
+            if i > (width):
                 break
 
             u = int(item.value / scale)
-            for y in range(max_unit):
+            for y in range(height):
                 if y < u:
                     s[y] = f"{s[y]}█"
                 else:
