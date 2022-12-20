@@ -54,22 +54,34 @@ class DisplayPanel(DashboardPanel):
         if self.no_values:
             print("No values")
             return
-
         height = lines - 5
         width = rh_size - 2
 
-        scale = self.max_v / height
-        max_unit = int(self.max_v / scale)
+        y_axis_width = 5
+
+        graph_width = width  - y_axis_width
+        graph_height = height
+
+        scale = self.max_v / graph_height
 
         print(f"\033[{(lines - 2)}A")
-        s = [f"\033[{rh_offset}C" for _ in range(height)]
+        s = [f"\033[{rh_offset}C" for _ in range(graph_height)]
+
+        # Print y axis
+        for i in range(graph_height):
+            if i % 3 == 0:
+                n = f"{(i * scale):.1f}".rjust(4)
+                s[i] = f"{s[i]}{n} "
+            else:
+                space = " " * y_axis_width
+                s[i] = f"{s[i]}{space}"
 
         for i, item in enumerate(self.data):
-            if i > (width):
+            if i > (graph_width):
                 break
 
             u = int(item.value / scale)
-            for y in range(height):
+            for y in range(graph_height):
                 if y < u:
                     s[y] = f"{s[y]}█"
                 else:
