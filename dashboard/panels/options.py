@@ -57,7 +57,7 @@ class OptionsPanel(DashboardPanel):
         if len(sites) == 0:
             self.__update_group_select()
             return
-        species = data.species(sites[data.selected_site])
+        species = data.get_species(sites[data.selected_site])
         items = [s.name for s in species]
 
         if self.species_select is None:
@@ -85,9 +85,21 @@ class OptionsPanel(DashboardPanel):
         self.species_select = None
         self.__update_species_select()
 
-        self.start_date = DateInput(pd.Timestamp.now() - pd.Timedelta(days=1))
+        def get_start_date():
+            return MonitoringData.instance().start_date
 
-        self.end_date = DateInput()
+        def set_start_date(val):
+            MonitoringData.instance().start_date = val
+
+        self.start_date = DateInput(get_start_date, set_start_date)
+
+        def get_end_date():
+            return MonitoringData.instance().end_date
+
+        def set_end_date(val):
+            MonitoringData.instance().end_date = val
+            
+        self.end_date = DateInput(get_end_date, set_end_date)
 
     def _print(self, cols, lines, rh_size, rh_offset):
 

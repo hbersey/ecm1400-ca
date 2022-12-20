@@ -35,11 +35,15 @@ class LRSelect:
 
 
 class DateInput:
-    def __init__(self, date=pd.Timestamp.now()) -> None:
-        self.date = date
-        self.current_day = self.date.day
-        self.current_month = self.date.month
-        self.current_year = self.date.year
+    def __init__(self, get_date, set_date) -> None:
+        self.__get_date = get_date
+        self.__set_date = set_date
+
+        d = self.__get_date()
+
+        self.current_day = d.day
+        self.current_month = d.month
+        self.current_year = d.year
         self.current_section = 0
 
     def print(self, rh_offset):
@@ -88,3 +92,15 @@ class DateInput:
             elif self.current_section == 2:
                 self.current_year = max(
                     1, min(9999, self.current_year + delta))
+
+            self.__set_date(pd.Timestamp(self.current_year,
+                                         self.current_month, self.current_day))
+
+
+class HScroll:
+    def __init__(self, text):
+        self.text = text
+        self.offset = 0
+
+    def print(self, rh_offset, rh_size):
+        pass

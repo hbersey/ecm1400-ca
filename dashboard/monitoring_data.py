@@ -4,6 +4,7 @@ import typing as t
 from simplejson.errors import JSONDecodeError
 import pandas as pd
 
+
 class MonitoringData:
     _instance = None
     _groups: t.Dict[str, SiteGroup] = None
@@ -15,7 +16,18 @@ class MonitoringData:
     selected_site = 0
     selected_species = 0
     start_date = pd.Timestamp.now() - pd.Timedelta(days=1)
-    end_date = pd.Timestamp.now() - pd.Timedelta(days=1)
+    end_date = pd.Timestamp.now() 
+    @property
+    def group(self) -> SiteGroup:
+        return self.groups[self.group_name(self.selected_group)]
+
+    @property
+    def site(self) -> Site:
+        return self.sites(self.group.name)[self.selected_site]
+
+    @property
+    def species(self) -> Species:
+        return self.get_species(self.site)[self.selected_species]
 
     @property
     def groups(self) -> t.Dict[str, SiteGroup]:
@@ -39,7 +51,7 @@ class MonitoringData:
 
         return self._sites[group_name]
 
-    def species(self, site: Site) -> t.List[Species]:
+    def get_species(self, site: Site) -> t.List[Species]:
         if self._all_species == None:
             self._all_species = Species.get_species()
 
