@@ -1,6 +1,6 @@
-from dashboard.panels._panel import DashboardPanel
-from dashboard.interface import clear_term
-import dashboard.keys as keys
+from monitoring_.panels._panel import DashboardPanel
+from monitoring_.interface import clear_term
+import monitoring_.keys as keys
 
 import sys
 

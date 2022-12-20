@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 import typing as t
 import requests
-from dashboard.species import Species
+from monitoring_.species import Species
 from datetime import datetime
 from utils import parse_or_none, or_none
 

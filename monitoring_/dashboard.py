@@ -1,14 +1,14 @@
-import dashboard.interface as if_
+import monitoring_.interface as if_
 from utils import getch
 import sys
-import dashboard.keys as keys
+import monitoring_.keys as keys
 
-from dashboard.panels._panel import DashboardPanel
-from dashboard.panels.home import HomePanel
-from dashboard.panels.options import OptionsPanel
-from dashboard.panels.about import AboutPanel
-from dashboard.panels.display import DisplayPanel
-from dashboard.panels.exit import ExitPanel
+from monitoring_.panels._panel import DashboardPanel
+from monitoring_.panels.home import HomePanel
+from monitoring_.panels.options import OptionsPanel
+from monitoring_.panels.about import AboutPanel
+from monitoring_.panels.display import DisplayPanel
+from monitoring_.panels.exit import ExitPanel
 
 LH = [
     ["Home", HomePanel],
@@ -70,7 +70,3 @@ class Dashboard:
     def run():
         dashboard = Dashboard()
         dashboard.__run()
-
-
-if __name__ == "__main__":
-    Dashboard.run()

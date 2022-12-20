@@ -1,9 +1,9 @@
-from dashboard.panels._panel import DashboardPanel
-from dashboard.monitoring_data import MonitoringData
+from monitoring_.panels._panel import DashboardPanel
+from monitoring_.monitoring_data import MonitoringData
 import requests
 from dataclasses import dataclass
 import pandas as pd
-import dashboard.keys as keys
+import monitoring_.keys as keys
 
 
 @dataclass
@@ -26,9 +26,6 @@ class DisplayPanel(DashboardPanel):
         res = requests.get(
             f"https://api.erg.ic.ac.uk/AirQuality/Data/SiteSpecies/SiteCode={site_code}/SpeciesCode={species_code}/StartDate={start_date}/EndDate={end_date}/Json")
 
-        # res = requests.get(
-        #     "https://api.erg.ic.ac.uk/AirQuality/Data/SiteSpecies/SiteCode=BX2/SpeciesCode=NO2/StartDate=2022-10-20/EndDate=2022-12-20/Json")
-
         self.data = []
         self.no_values = True
 
@@ -48,13 +45,12 @@ class DisplayPanel(DashboardPanel):
                 v
             ))
 
-        # self.scroll = HScroll("")
-
     def _print(self, cols, lines, rh_size, rh_offset):
         if self.no_values:
             print(f"\033[{(lines - 2)}A")
             print(f"\033[{rh_offset}C No data available for current selection")
-            print(f"\033[{rh_offset}C Try bexley > Bexley - Belvedere > NO2 for an example")
+            print(
+                f"\033[{rh_offset}C Try bexley > Bexley - Belvedere > NO2 for an example")
 
             return
         height = lines - 5

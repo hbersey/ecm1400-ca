@@ -1,5 +1,5 @@
-from dashboard.sites import SiteGroup, Site
-from dashboard.species import Species
+from monitoring_.sites import SiteGroup, Site
+from monitoring_.species import Species
 import typing as t
 from simplejson.errors import JSONDecodeError
 import pandas as pd

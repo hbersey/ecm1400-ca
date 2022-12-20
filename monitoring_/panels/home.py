@@ -1,8 +1,9 @@
-from dashboard.panels._panel import DashboardPanel
+from monitoring_.panels._panel import DashboardPanel
 
 class HomePanel(DashboardPanel):
     __LINES = """Welcome to the Air Quality Monitoring System.
 Navigate around using the w, a, s and d keys.
+Use the tab key to change column when entering dates.
 To select an option, press enter.
 To go back, press the escape key.""".splitlines()
 

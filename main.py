@@ -1,5 +1,5 @@
 import typing as t
-from dashboard.dashboard import Dashboard
+from monitoring_.dashboard import Dashboard
 import reporting as pr
 import intelligence as mi
 from utils import menu
@@ -46,7 +46,7 @@ def reporting_menu() -> None:
 
 
 def monitoring_menu() -> None:
-    """Allows the user to enter full screen mode and then opens the monitoring dashboard."""
+    """Allows the user to enter full screen mode and then opens the monitoring monitoring_."""
     print("Monitoring Dashboard Opening Now.\nYou may want to enter full screen mode.")
     menu("Are you ready?", [
         ("Y", "Yes!"),

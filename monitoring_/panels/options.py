@@ -1,8 +1,8 @@
-from dashboard.panels._panel import DashboardPanel
-from dashboard.panels._components import *
-import dashboard.keys as keys
-from dashboard.species import Species
-from dashboard.monitoring_data import MonitoringData
+from monitoring_.panels._panel import DashboardPanel
+from monitoring_.panels._components import *
+import monitoring_.keys as keys
+from monitoring_.species import Species
+from monitoring_.monitoring_data import MonitoringData
 
 
 class OptionsPanel(DashboardPanel):

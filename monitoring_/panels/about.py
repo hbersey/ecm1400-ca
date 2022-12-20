@@ -1,5 +1,5 @@
-from dashboard.panels._panel import DashboardPanel
-from dashboard.monitoring_data import MonitoringData
+from monitoring_.panels._panel import DashboardPanel
+from monitoring_.monitoring_data import MonitoringData
 import textwrap
 
 def wrap(text, title, rh_size, rh_offset):

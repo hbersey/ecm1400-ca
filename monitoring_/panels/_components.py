@@ -1,4 +1,4 @@
-import dashboard.keys as keys
+import monitoring_.keys as keys
 import pandas as pd
 
 
@@ -95,12 +95,3 @@ class DateInput:
 
             self.__set_date(pd.Timestamp(self.current_year,
                                          self.current_month, self.current_day))
-
-
-class HScroll:
-    def __init__(self, text):
-        self.text = text
-        self.offset = 0
-
-    def print(self, rh_offset, rh_size):
-        pass

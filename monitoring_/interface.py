@@ -23,7 +23,7 @@ def horizontal_rule(cols, char='-') -> None:
 
 def layout(lh, selected, is_rh):
     """
-    Prints the layout of the dashboard.
+    Prints the layout of the monitoring_.
 
     Parameters
     ----------
